@@ -69,7 +69,7 @@ class FormFieldView extends StatefulWidget {
       onSaved: onSaved,
       enabled: enabled,
       icon: icon ?? FontAwesomeIcons.solidUser,
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
     );
   }
 
@@ -93,7 +93,7 @@ class FormFieldView extends StatefulWidget {
       mandatory: mandatory,
       icon: icon ?? FontAwesomeIcons.locationDot,
       keyboardType: TextInputType.streetAddress,
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
       textCapitalization: textCapitalization ?? TextCapitalization.sentences,
       onChanged: onChanged,
       onSaved: onSaved,
@@ -120,7 +120,7 @@ class FormFieldView extends StatefulWidget {
       mandatory: mandatory,
       icon: icon ?? FontAwesomeIcons.phone,
       keyboardType: TextInputType.phone,
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
       onChanged: onChanged,
       onSaved: onSaved,
       validate: (value) {
@@ -166,7 +166,7 @@ class FormFieldView extends StatefulWidget {
       mandatory: mandatory,
       icon: icon ?? FontAwesomeIcons.whatsapp,
       keyboardType: TextInputType.phone,
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
       validate: (value) {
         if (mandatory ?? true) {
           if (value == null || value.trim().isEmpty) {
@@ -212,7 +212,7 @@ class FormFieldView extends StatefulWidget {
       mandatory: mandatory,
       icon: icon ?? FontAwesomeIcons.envelope,
       keyboardType: TextInputType.emailAddress,
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
       validate: ((value) {
         if (mandatory ?? true) {
           if (value == null || value.trim().isEmpty) {
@@ -255,7 +255,7 @@ class FormFieldView extends StatefulWidget {
       mandatory: mandatory,
       icon: icon ?? FontAwesomeIcons.rupeeSign,
       keyboardType: TextInputType.numberWithOptions(decimal: true),
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
     );
   }
 
@@ -282,7 +282,7 @@ class FormFieldView extends StatefulWidget {
       mandatory: mandatory,
       icon: icon ?? FontAwesomeIcons.lock,
       keyboardType: TextInputType.visiblePassword,
-      iconSize: iconSize ?? Globals.formFieldIconSize,
+      iconSize: iconSize ?? AppTheme.formFieldIconSize,
       isPassword: true,
     );
   }

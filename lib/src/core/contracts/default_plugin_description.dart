@@ -33,7 +33,7 @@ class SingleRouteDescriptionAndPolicy {
   });
 }
 
-/// Data binding information for a plugin's model and Firestore collection.
+///Step 3  Data binding information for a plugin's model and Firestore collection.
 class PluginDataBinding<T extends DataModel> {
   final String collectionName;
   final T Function(Map<String, dynamic> json) fromJson;
@@ -46,8 +46,7 @@ class PluginDataBinding<T extends DataModel> {
   });
 }
 
-/// The top-level descriptor a developer provides to register a plugin.
-/// This is the entire surface area a module author fills in.
+/// The top-level descriptor a developer provides to register a plugin. This is the entire surface area a module author fills in.
 class DefaultPluginDescription<T extends DataModel> {
   /// Stable unique identifier.
   final String moduleId;
@@ -64,7 +63,7 @@ class DefaultPluginDescription<T extends DataModel> {
   /// Routes this plugin contributes.
   final List<SingleRouteDescriptionAndPolicy> routes;
 
-  /// Data binding: collection, serializer, empty factory.
+  ///Step 3:  Data binding: collection, serializer, empty factory.
   final PluginDataBinding<T> dataBinding;
 
   /// Visibility policy: is this plugin shown to current user?

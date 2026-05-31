@@ -32,6 +32,7 @@ class SectionWidget<T extends DataModel> extends StatefulWidget {
   final bool showAddButton;
   final Set<String> initialSelectedStatuses;
   final String firstTabLabel;
+  final SectionLayoutMode defaultLayoutMode;
 
   const SectionWidget({
     super.key,
@@ -55,6 +56,7 @@ class SectionWidget<T extends DataModel> extends StatefulWidget {
     this.showAddButton = true,
     this.initialSelectedStatuses = const <String>{},
     this.firstTabLabel = 'Details',
+    this.defaultLayoutMode = SectionLayoutMode.list,
   });
 
   @override
@@ -67,10 +69,12 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
   final GlobalKey _leftPaneKey = GlobalKey();
   double _headerLeftActionsInset = 0;
   bool _mobileViewingDetail = false;
+  late SectionLayoutMode _layoutMode;
 
   @override
   void initState() {
     super.initState();
+    _layoutMode = widget.defaultLayoutMode;
     cubit = SectionCubit<T>(
       repo: widget.repo,
       statusKeyOf: widget.statusKeyOf,
@@ -109,7 +113,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
       maxLines: 1,
     )..layout();
 
-    return 24 + Globals.sidePadding + textPainter.width + Globals.sidePadding;
+    return 24 + AppTheme.sidePadding + textPainter.width + AppTheme.sidePadding;
   }
 
   void _scheduleHeaderInsetMeasurement(BuildContext context) {
@@ -188,10 +192,10 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
       child: Column(
         children: [
           Container(
-            height: Globals.topBarHeight,
+            height: AppTheme.topBarHeight,
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
             child: Padding(
-              padding: EdgeInsets.only(right: Globals.sidePadding / 2),
+              padding: EdgeInsets.only(right: AppTheme.sidePadding / 2),
               child: Row(
                 children: [
                   IconButton(
@@ -292,7 +296,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
               CustomButton(
                 text: 'Add ${widget.sectionTitle}',
                 buttonType: ButtonType.secondary,
-                height: Globals.formButtonHeight - 6,
+                height: AppTheme.formButtonHeight - 6,
                 icon: Icons.add,
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -309,39 +313,112 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
           // Shared list pane used in both mobile and desktop layouts
           final Widget listPane = Column(
             children: [
-              CustomizableSearchBar(
-                controller: _searchController,
-                onChanged: (value) {
-                  cubit.search(value);
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomizableSearchBar(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        cubit.search(value);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Tooltip(
+                    message: _layoutMode == SectionLayoutMode.list
+                        ? 'Switch to Grid View'
+                        : 'Switch to List View',
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _layoutMode = _layoutMode == SectionLayoutMode.list
+                              ? SectionLayoutMode.grid
+                              : SectionLayoutMode.list;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: AppTheme.formFieldHeight - 8,
+                        height: AppTheme.formFieldHeight - 8,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        margin: const EdgeInsets.only(right: 8),
+                        child: Icon(
+                          _layoutMode == SectionLayoutMode.list
+                              ? Icons.grid_view_rounded
+                              : Icons.list_rounded,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Divider(height: 1),
               Expanded(
                 child: state.filteredItems.isNotEmpty
-                    ? CustomListView(
-                        data: state.filteredItems,
-                        selectedItem: state.selectedItem,
-                        onItemTap: (item) {
-                          final tappedItem = item as T;
-                          final selectedUid = state.selectedItem?.uid;
+                    ? (_layoutMode == SectionLayoutMode.list
+                        ? CustomListView(
+                            data: state.filteredItems,
+                            selectedItem: state.selectedItem,
+                            onItemTap: (item) {
+                              final tappedItem = item as T;
+                              final selectedUid = state.selectedItem?.uid;
 
-                          if (selectedUid != tappedItem.uid) {
-                            if (Globals.hasUnsavedFormChanges) {
-                              CustomSnackBar.show(
-                                context,
-                                'You have unsaved changes. Changes were discarded when switching item.',
-                                category: SnackBarCategory.warning,
-                              );
-                              Globals.hasUnsavedFormChanges = false;
-                            }
-                            cubit.selectItem(tappedItem);
-                          }
+                              if (selectedUid != tappedItem.uid) {
+                                if (SectionCubit.hasUnsavedFormChanges) {
+                                  CustomSnackBar.show(
+                                    context,
+                                    'You have unsaved changes. Changes were discarded when switching item.',
+                                    category: SnackBarCategory.warning,
+                                  );
+                                  SectionCubit.hasUnsavedFormChanges = false;
+                                }
+                                cubit.selectItem(tappedItem);
+                              }
 
-                          if (isMobile) {
-                            setState(() => _mobileViewingDetail = true);
-                          }
-                        },
-                      )
+                              if (isMobile) {
+                                setState(() => _mobileViewingDetail = true);
+                              }
+                            },
+                          )
+                        : PluginGridView(
+                            data: state.filteredItems,
+                            selectedItem: state.selectedItem,
+                            sectionColor: widget.sectionColor,
+                            sectionIcon: widget.sectionIcon,
+                            statusKeyOf: widget.statusKeyOf != null
+                                ? (item) => widget.statusKeyOf!(item as T)
+                                : null,
+                            onItemTap: (item) {
+                              final tappedItem = item as T;
+                              final selectedUid = state.selectedItem?.uid;
+
+                              if (selectedUid != tappedItem.uid) {
+                                if (SectionCubit.hasUnsavedFormChanges) {
+                                  CustomSnackBar.show(
+                                    context,
+                                    'You have unsaved changes. Changes were discarded when switching item.',
+                                    category: SnackBarCategory.warning,
+                                  );
+                                  SectionCubit.hasUnsavedFormChanges = false;
+                                }
+                                cubit.selectItem(tappedItem);
+                              }
+
+                              if (isMobile) {
+                                setState(() => _mobileViewingDetail = true);
+                              }
+                            },
+                          ))
                     : NoDataView(
                         title: 'No ${widget.sectionTitle} Found',
                         subtitle:

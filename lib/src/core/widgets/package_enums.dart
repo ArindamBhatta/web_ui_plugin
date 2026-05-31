@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 enum EntityType { weekday, taxSlab, availabilityStatus, persona }
 
+enum SectionLayoutMode { list, grid }
+
 enum SortOrder { ascending, descending }
 
 enum SortBy { name, id }

@@ -140,7 +140,7 @@ class _PluginLeftNavigationState extends State<PluginLeftNavigation> {
     );
 
     return SizedBox(
-      height: Globals.topBarHeight,
+      height: AppTheme.topBarHeight,
       child: Container(
         color: Theme.of(context).colorScheme.primaryFixedDim,
         child: _collapsed
@@ -311,13 +311,13 @@ class _PluginLeftNavigationState extends State<PluginLeftNavigation> {
             onTap: () {
               if (widget.warnOnUnsavedChanges &&
                   currentPath != primaryRoute.path &&
-                  Globals.hasUnsavedFormChanges) {
+                  SectionCubit.hasUnsavedFormChanges) {
                 CustomSnackBar.show(
                   context,
                   'You lost some unsaved changes by navigating out of this page.',
                   category: SnackBarCategory.warning,
                 );
-                Globals.hasUnsavedFormChanges = false;
+                SectionCubit.hasUnsavedFormChanges = false;
               }
 
               context.go(primaryRoute.path);

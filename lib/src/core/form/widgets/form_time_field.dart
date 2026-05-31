@@ -175,7 +175,7 @@ class _FormTimeFieldState extends State<FormTimeField> {
             maxLength: 2,
           ),
         ),
-        SizedBox(width: Globals.formFieldGap),
+        SizedBox(width: AppTheme.formFieldGap),
         ToggleSwitch(
           minWidth: 50.0,
           initialLabelIndex: _isAm ? 0 : 1,
@@ -207,7 +207,7 @@ class _FormTimeFieldState extends State<FormTimeField> {
             ),
           ],
         ),
-        SizedBox(width: Globals.formFieldGap),
+        SizedBox(width: AppTheme.formFieldGap),
         CustomButton(
           buttonType: ButtonType.tertiary,
           text: 'Pick Time',

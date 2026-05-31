@@ -107,14 +107,6 @@ Issues found during architecture review (April 2026). Ordered by severity.
 **Problem:** `BootstrapConfig.uploadCapability` is accepted but never passed to `FormCubit` or `PluginDescriptor`. Plugins that declare `supportsUpload: true` have no access to the capability at runtime.
 **Fix:** Pass `uploadCapability` through `AppBootstrap._buildCubits` or expose it via a `RepositoryProvider<UploadCapability>`.
 
-### #3 — All `FormCubit`s in `_buildCubits` share the first `ScopedRepo` — HIGH (bug)
-**File:** `lib/src/core/bootstrap/app_bootstrap.dart`
-```dart
-create: (_) => FormCubit(repo: RepositoryProvider.of<ScopedRepo>(context)),
-```
-**Problem:** `RepositoryProvider.of<ScopedRepo>` resolves untyped and returns the first `ScopedRepo` in the tree for every plugin. Every `FormCubit` ends up pointing at the same repository.
-**Fix:** Look up each plugin's repo by `moduleId` using a typed provider key or a registry lookup inside the `create` closure.
-
 ### #4 — `FormRepoMixin.update` and `FormCubit.updateItem` expose an index — MEDIUM
 **Files:** `form_repo_mixin.dart`, `form_cubit.dart`
 **Problem:** `update(int index, T item)` — callers must track a list position. The underlying service finds items by `id`, not index; the index only updates the local cache.
@@ -148,3 +140,8 @@ create: (_) => FormCubit(repo: RepositoryProvider.of<ScopedRepo>(context)),
 <img src="docs/assets/images/img_2.png" width="900"/>      |
 <img src="docs/assets/images/img_3.png" width="900"/>      |
 <img src="docs/assets/images/img_4.png" width="900"/>      |
+
+
+
+
+-- firebase emulators:start --import=./emulator-data --export-on-exit

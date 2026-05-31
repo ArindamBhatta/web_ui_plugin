@@ -187,8 +187,8 @@ class _FormDropdownFieldState<T extends DataModel>
                                     widget._itemLabel?.call(item) ?? '',
                                   ),
                                   contentPadding: EdgeInsets.only(
-                                    left: Globals.sidePadding,
-                                    right: Globals.sidePadding / 2,
+                                    left: AppTheme.sidePadding,
+                                    right: AppTheme.sidePadding / 2,
                                   ),
                                   value: selected == item,
                                   onChanged: isDialogReadOnly
@@ -291,7 +291,7 @@ class _FormDropdownFieldState<T extends DataModel>
             mandatory: widget.mandatory ?? true,
           ),
         ),
-        SizedBox(width: Globals.formFieldGap),
+        SizedBox(width: AppTheme.formFieldGap),
         CustomButton(
           buttonType: ButtonType.tertiary,
           text: widget.buttonText,

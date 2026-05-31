@@ -137,7 +137,7 @@ class _FormPageViewState extends State<FormPageView> {
     }
 
     _isDataMismatch = false;
-    Globals.hasUnsavedFormChanges = false;
+    SectionCubit.hasUnsavedFormChanges = false;
   }
 
   dynamic _cloneValue(dynamic value) {
@@ -157,7 +157,7 @@ class _FormPageViewState extends State<FormPageView> {
         ),
       );
     _isDataMismatch = false;
-    Globals.hasUnsavedFormChanges = false;
+    SectionCubit.hasUnsavedFormChanges = false;
     _formResetVersion++;
     setState(() {});
     CustomSnackBar.show(
@@ -266,7 +266,7 @@ class _FormPageViewState extends State<FormPageView> {
 
     //Update the flag!
     _isDataMismatch = isDirty;
-    Globals.hasUnsavedFormChanges = _isDataMismatch;
+    SectionCubit.hasUnsavedFormChanges = _isDataMismatch;
 
     final hasDynamicDropdown = widget.fields.any(
       (field) => field is ListingWidgetConfig && field.itemsBuilder != null,
@@ -338,7 +338,7 @@ class _FormPageViewState extends State<FormPageView> {
 
         // Reset dirty state after successful save
         _isDataMismatch = false;
-        Globals.hasUnsavedFormChanges = false;
+        SectionCubit.hasUnsavedFormChanges = false;
 
         if (mounted) {
           CustomSnackBar.show(
@@ -379,7 +379,7 @@ class _FormPageViewState extends State<FormPageView> {
         autofocus: true,
         onKeyEvent: _onFormKeyEvent,
         child: Padding(
-          padding: EdgeInsets.all(Globals.sidePadding),
+          padding: EdgeInsets.all(AppTheme.sidePadding),
           child: Column(
             children: [
               Expanded(
@@ -393,7 +393,7 @@ class _FormPageViewState extends State<FormPageView> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 8),
                         child: Column(
-                          spacing: Globals.formFieldGap,
+                          spacing: AppTheme.formFieldGap,
                           children: widget.fields
                               // Handle field-level visibility
                               .where((field) {
@@ -421,7 +421,7 @@ class _FormPageViewState extends State<FormPageView> {
               ),
               //save button and cancel button
               Padding(
-                padding: EdgeInsets.only(top: Globals.sidePadding),
+                padding: EdgeInsets.only(top: AppTheme.sidePadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -451,7 +451,7 @@ class _FormPageViewState extends State<FormPageView> {
                                   ...widget.actionButtons.map((button) {
                                     return Padding(
                                       padding: EdgeInsets.only(
-                                        right: Globals.formFieldGap,
+                                        right: AppTheme.formFieldGap,
                                       ),
                                       child: button,
                                     );
@@ -470,7 +470,7 @@ class _FormPageViewState extends State<FormPageView> {
                                       onPressed: () {
                                         if (_isDataMismatch) {
                                           _showUnsavedChangesLostSnackBar();
-                                          Globals.hasUnsavedFormChanges = false;
+                                          SectionCubit.hasUnsavedFormChanges = false;
                                         }
 
                                         if (widget.onCancel != null) {
@@ -481,7 +481,7 @@ class _FormPageViewState extends State<FormPageView> {
                                         Navigator.of(context).pop();
                                       },
                                     ),
-                                    SizedBox(width: Globals.formFieldGap),
+                                    SizedBox(width: AppTheme.formFieldGap),
                                   ],
 
                                   CustomButton(
@@ -492,7 +492,7 @@ class _FormPageViewState extends State<FormPageView> {
                                     icon: isUndoMode
                                         ? Icons.restore_page_outlined
                                         : Icons.save_outlined,
-                                    height: Globals.buttonHeight,
+                                    height: AppTheme.buttonHeight,
                                     buttonState: saveButtonState,
                                     onPressed: () {
                                       final bool isUndoModeOnClick =

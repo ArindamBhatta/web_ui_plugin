@@ -7,7 +7,6 @@ import 'package:web_ui_plugins/web_ui_plugins.dart';
 import '../../domain/enums/vet_application_enums.dart';
 import '../../domain/models/doctor_model.dart';
 
-/// Doctors plugin descriptor.
 /// This is the entire surface area the developer fills in to add a new section.
 final DefaultPluginDescription<DoctorModel>
 doctorsPlugin = DefaultPluginDescription<DoctorModel>(
@@ -33,6 +32,7 @@ doctorsPlugin = DefaultPluginDescription<DoctorModel>(
     fromJson: DoctorModel.fromJson,
     createEmpty: DoctorModel.new,
   ),
+
   // It turns this into a GoRoute and adds it to a list called pluginRoutes.
   routes: [
     SingleRouteDescriptionAndPolicy(
@@ -69,8 +69,8 @@ class DoctorsSectionPage extends StatelessWidget {
       repo: repo,
       formCubit: cubit,
       initialSelectedItemId: initialSelectedItemId,
-      // If SectionWidget supported this flag, you would pass it here to hide the FAB/Add button
-      // supportsCrud: doctorsPlugin.features.supportsCrud,
+      statusKeyOf: (item) => item.active,
+      defaultLayoutMode: SectionLayoutMode.grid,
       createEmptyModel: DoctorModel.new,
 
       rebuildDataModel: (data) => DoctorModel(

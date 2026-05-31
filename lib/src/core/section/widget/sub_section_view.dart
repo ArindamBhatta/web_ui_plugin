@@ -35,11 +35,11 @@ class SubSectionView extends StatelessWidget {
             Container(
               color: headerFooterColor,
               child: SizedBox(
-                height: Globals.formButtonHeight,
+                height: AppTheme.formButtonHeight,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    left: Globals.sidePadding,
-                    right: Globals.sidePadding,
+                    left: AppTheme.sidePadding,
+                    right: AppTheme.sidePadding,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -87,14 +87,14 @@ class SubSectionView extends StatelessWidget {
             Divider(
               thickness: 1,
               height: 1,
-              indent: Globals.sidePadding + 10,
-              endIndent: Globals.sidePadding + 10,
+              indent: AppTheme.sidePadding + 10,
+              endIndent: AppTheme.sidePadding + 10,
             ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: Globals.sidePadding,
-                  right: Globals.sidePadding,
+                  left: AppTheme.sidePadding,
+                  right: AppTheme.sidePadding,
                 ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
@@ -133,17 +133,17 @@ class SubSectionView extends StatelessWidget {
               Divider(
                 thickness: 1,
                 height: 1,
-                indent: Globals.sidePadding + 10,
-                endIndent: Globals.sidePadding + 10,
+                indent: AppTheme.sidePadding + 10,
+                endIndent: AppTheme.sidePadding + 10,
               ),
               Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Container(
                   color: headerFooterColor,
-                  height: Globals.formButtonHeight,
+                  height: AppTheme.formButtonHeight,
                   padding: EdgeInsets.only(
-                    left: Globals.sidePadding,
-                    right: Globals.sidePadding,
+                    left: AppTheme.sidePadding,
+                    right: AppTheme.sidePadding,
                   ),
                   alignment: Alignment.centerLeft,
                   child: Row(

@@ -29,6 +29,8 @@ export 'src/core/permissions/permission_middleware.dart';
 export 'src/core/theme/app_theme.dart';
 export 'src/core/theme/app_colors.dart';
 export 'src/core/theme/theme_extensions.dart';
+export 'src/core/theme/brand_blues.dart';
+export 'src/core/theme/outer_space_stage.dart';
 // ── Navigation ────────────────────────────────────────────────────────────────
 export 'src/core/navigation/plugin_left_navigation.dart';
 
@@ -50,7 +52,9 @@ export 'src/core/section/widget/section_widget.dart';
 export 'src/core/section/widget/sub_section_view.dart';
 export 'src/core/section/widget/custom_list_view.dart';
 export 'src/core/section/widget/custom_list_tile.dart';
+export 'src/core/section/widget/plugin_grid_view.dart';
 export 'src/core/section/widget/no_data_view.dart';
+export 'src/core/section/widget/custom_tabular_view.dart';
 
 // ── Shared UI primitives ──────────────────────────────────────────────────────
 export 'src/core/widgets/custom_button.dart';
@@ -58,8 +62,6 @@ export 'src/core/widgets/custom_dialog_box.dart';
 export 'src/core/widgets/custom_snack_bar.dart';
 export 'src/core/widgets/custom_textfield.dart';
 export 'src/core/widgets/customizable_search_bar.dart';
-//globals
-export 'src/core/contracts/globals.dart';
 export 'src/core/widgets/package_enums.dart';
 
 // ── Utility functions ─────────────────────────────────────────────────────────

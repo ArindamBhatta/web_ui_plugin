@@ -27,7 +27,7 @@ class CustomDialogBox extends StatelessWidget {
       titlePadding: EdgeInsets.zero,
       title: Container(
         height: 50,
-        padding: EdgeInsets.symmetric(horizontal: Globals.sidePadding),
+        padding: EdgeInsets.symmetric(horizontal: AppTheme.sidePadding),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.vertical(

@@ -32,18 +32,18 @@ class SectionView extends StatelessWidget {
         //header portion of section
         Container(
           color: Theme.of(context).colorScheme.surfaceContainerHighest,
-          height: Globals.topBarHeight,
+          height: AppTheme.topBarHeight,
           child: Padding(
             padding: EdgeInsets.only(
-              left: Globals.sidePadding,
-              right: Globals.sidePadding / 2,
+              left: AppTheme.sidePadding,
+              right: AppTheme.sidePadding / 2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(sectionIcon, size: 24, color: sectionColor),
-                SizedBox(width: Globals.sidePadding),
+                SizedBox(width: AppTheme.sidePadding),
                 Text(
                   sectionLabel.toUpperCase(),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -55,11 +55,11 @@ class SectionView extends StatelessWidget {
                 ),
                 if (headerLeftActions != null &&
                     headerLeftActions!.isNotEmpty) ...[
-                  SizedBox(width: Globals.sidePadding),
+                  SizedBox(width: AppTheme.sidePadding),
                   Padding(
                     padding: EdgeInsets.only(left: headerLeftActionsInset),
                     child: Row(
-                      spacing: Globals.sidePadding / 2,
+                      spacing: AppTheme.sidePadding / 2,
                       children: headerLeftActions!,
                     ),
                   ),
@@ -68,7 +68,7 @@ class SectionView extends StatelessWidget {
                 if (headerCenterActions != null &&
                     headerCenterActions!.isNotEmpty) ...[
                   Row(
-                    spacing: Globals.sidePadding / 2,
+                    spacing: AppTheme.sidePadding / 2,
                     children: headerCenterActions!,
                   ),
                   const Spacer(),
@@ -76,11 +76,11 @@ class SectionView extends StatelessWidget {
                 if (headerRightActions != null &&
                     headerRightActions!.isNotEmpty)
                   Row(
-                    spacing: Globals.sidePadding / 2,
+                    spacing: AppTheme.sidePadding / 2,
                     children: headerRightActions!,
                   )
                 else if (actions != null)
-                  Row(spacing: Globals.sidePadding, children: actions!),
+                  Row(spacing: AppTheme.sidePadding, children: actions!),
               ],
             ),
           ),

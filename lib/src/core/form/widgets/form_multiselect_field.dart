@@ -172,7 +172,7 @@ class _FormMultiSelectFieldState<T extends DataModel>
             mandatory: widget.mandatory ?? true,
           ),
         ),
-        SizedBox(width: Globals.formFieldGap),
+        SizedBox(width: AppTheme.formFieldGap),
         CustomButton(
           buttonType: ButtonType.tertiary,
           text: widget.buttonText,
@@ -260,7 +260,7 @@ class _FormMultiSelectFieldState<T extends DataModel>
                   ),
 
                   Padding(
-                    padding: EdgeInsets.all(Globals.sidePadding),
+                    padding: EdgeInsets.all(AppTheme.sidePadding),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -269,7 +269,7 @@ class _FormMultiSelectFieldState<T extends DataModel>
                           onPressed: () => Navigator.pop(dialogContext),
                           buttonType: ButtonType.tertiary,
                         ),
-                        SizedBox(width: Globals.sidePadding),
+                        SizedBox(width: AppTheme.sidePadding),
                         CustomButton(
                           text: "OK",
                           buttonType: ButtonType.primary,

@@ -209,7 +209,7 @@ class _FormAgeFieldState extends State<FormAgeField> {
             validator: widget.dayValidator ?? _defaultDayValidator,
           ),
         ),
-        SizedBox(width: Globals.formFieldGap),
+        SizedBox(width: AppTheme.formFieldGap),
         CustomButton(
           buttonType: ButtonType.tertiary,
           text: 'Date of Birth',

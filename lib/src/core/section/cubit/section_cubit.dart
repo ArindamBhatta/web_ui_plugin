@@ -10,6 +10,9 @@ import 'package:web_ui_plugins/src/core/contracts/data_model.dart';
 part 'section_state.dart';
 
 class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
+  // Tracks whether the currently active form has unsaved edits.
+  static bool hasUnsavedFormChanges = false;
+
   //1st take repo instance
   final FormRepoMixin<T> repo;
 

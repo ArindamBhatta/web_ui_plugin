@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:web_ui_plugins/web_ui_plugins.dart';
 
 import '../../domain/enums/vet_application_enums.dart';
+import '../../domain/models/pet_model.dart';
 import '../../domain/models/pet_owner_model.dart';
 
 // Single Source of Truth: - It describes everything the framework needs to know about a plugin/module: its unique ID, display info, routes, data binding, permissions, and features.
@@ -47,11 +48,41 @@ petOwnerPlugin = DefaultPluginDescription<PetOwnerModel>(
   ],
 );
 
-/// Single source of truth for Pet Owner state. Because this is static, the state
-/// (and realtime listeners) persist even when navigating to other plugins.
+/// Single source of truth for Pet Owner state. Because this is static, the state and realtime listeners persist even when navigating to other plugins.
 class PetOwnerPluginState {
-  static final repo = SectionRepo<PetOwnerModel>.fromDescriptor(petOwnerPlugin);
-  static final cubit = FormCubit<PetOwnerModel>(repo: repo);
+  static final SectionRepo<PetOwnerModel> repo =
+      SectionRepo<PetOwnerModel>.fromDescriptor(petOwnerPlugin);
+
+  static final FormCubit<PetOwnerModel> cubit = FormCubit<PetOwnerModel>(
+    repo: repo,
+  );
+}
+
+/// Single source of truth for Pet state inside the sub-section.
+class PetPluginState {
+  static final DefaultPluginDescription<PetModel> descriptor =
+      DefaultPluginDescription<PetModel>(
+    moduleId: 'pets',
+    title: 'Pets',
+    icon: FontAwesomeIcons.dog,
+    color: Colors.blue,
+    features: const PluginFeatureFlags(
+      supportsCrud: true,
+      supportsRealtime: true,
+    ),
+    dataBinding: PluginDataBinding<PetModel>(
+      collectionName: 'pets',
+      fromJson: PetModel.fromJson,
+      createEmpty: PetModel.new,
+    ),
+  );
+
+  static final SectionRepo<PetModel> repo =
+      SectionRepo<PetModel>.fromDescriptor(descriptor);
+
+  static final FormCubit<PetModel> cubit = FormCubit<PetModel>(
+    repo: repo,
+  );
 }
 
 class PetOwnerPluginPage extends StatelessWidget {
@@ -61,7 +92,8 @@ class PetOwnerPluginPage extends StatelessWidget {
 
   Widget _buildSection(BuildContext context, SectionRepo<PetOwnerModel> repo) {
     //When the user clicks "Update" in the FormPageView, the widget looks up the tree using BlocProvider.of<FormCubit<PetOwnerModel>>(context). Instead of finding a global instance from main.dart,
-    final cubit = BlocProvider.of<FormCubit<PetOwnerModel>>(context);
+    final FormCubit<PetOwnerModel> cubit =
+        BlocProvider.of<FormCubit<PetOwnerModel>>(context);
 
     return SectionWidget<PetOwnerModel>(
       sectionLabel: VetAppSection.petOwners.label,
@@ -72,6 +104,87 @@ class PetOwnerPluginPage extends StatelessWidget {
       formCubit: cubit,
       initialSelectedItemId: initialSelectedItemId,
       createEmptyModel: PetOwnerModel.new,
+
+      filterExtraTabs: (petOwners) => ["Pets"],
+
+      extraTabViewsBuilder: (petOwner) => [
+        (ownerId) => CustomTabularView<PetModel>(
+              repo: PetPluginState.repo,
+              formCubit: PetPluginState.cubit,
+              subSectionTitle: 'Pets',
+              createEmptyModel: () => PetModel(ownerId: ownerId),
+              filterFunction: (items) =>
+                  items.where((pet) => pet.ownerId == ownerId).toList(),
+              columns: [
+                TabularColumn<PetModel>(
+                  label: 'Pet Name',
+                  valueMapper: (pet) => pet.name ?? 'Unknown',
+                ),
+                TabularColumn<PetModel>(
+                  label: 'Species',
+                  valueMapper: (pet) => pet.species ?? 'Unknown',
+                ),
+                TabularColumn<PetModel>(
+                  label: 'Breed',
+                  valueMapper: (pet) => pet.breed ?? 'Unknown',
+                ),
+                TabularColumn<PetModel>(
+                  label: 'Age (Years)',
+                  valueMapper: (pet) => pet.age?.toString() ?? 'N/A',
+                  sortValueMapper: (pet) => pet.age ?? 0,
+                ),
+              ],
+              detailBuilder: (pet, ctx) => FormPageView(
+                formCubit: PetPluginState.cubit,
+                dataModel: pet,
+                supportsCrud: true,
+                fields: [
+                  WidgetConfig(
+                    key: 'name',
+                    fieldType: FieldType.name,
+                    labelText: 'Pet Name',
+                    initialValue: pet.name,
+                    mandatory: true,
+                    icon: FontAwesomeIcons.dog,
+                  ),
+                  WidgetConfig(
+                    key: 'species',
+                    fieldType: FieldType.general,
+                    labelText: 'Species',
+                    initialValue: pet.species,
+                    mandatory: true,
+                    icon: FontAwesomeIcons.paw,
+                  ),
+                  WidgetConfig(
+                    key: 'breed',
+                    fieldType: FieldType.general,
+                    labelText: 'Breed',
+                    initialValue: pet.breed,
+                    mandatory: false,
+                    icon: FontAwesomeIcons.dna,
+                  ),
+                  WidgetConfig(
+                    key: 'age',
+                    fieldType: FieldType.general,
+                    labelText: 'Age',
+                    initialValue: pet.age?.toString(),
+                    mandatory: false,
+                    icon: FontAwesomeIcons.clock,
+                  ),
+                ],
+                rebuildDataModel: (data) => PetModel(
+                  id: data['id'] as String?,
+                  ownerId: ownerId,
+                  name: data['name'] as String?,
+                  species: data['species'] as String?,
+                  breed: data['breed'] as String?,
+                  age: data['age'] is int
+                      ? data['age'] as int
+                      : int.tryParse(data['age']?.toString() ?? ''),
+                ),
+              ),
+            ),
+      ],
 
       rebuildDataModel: (data) => PetOwnerModel(
         id: data['id'] as String?,
@@ -150,8 +263,8 @@ class PetOwnerPluginPage extends StatelessWidget {
     // Provide the persistent, strictly-typed cubit to the widget tree for this route.
     // FormPageView and SectionWidget will successfully find it via BlocProvider.of!
     return BlocProvider.value(
-      value: PetOwnerPluginState
-          .cubit, //it finds the static singleton (PetOwnerPluginState.cubit) that you injected at the top of the page using BlocProvider.value.
+      //it finds the static singleton (PetOwnerPluginState.cubit) that you injected at the top of the page using BlocProvider.value.
+      value: PetOwnerPluginState.cubit,
       child: Builder(
         builder: (ctx) => _buildSection(ctx, PetOwnerPluginState.repo),
       ),
@@ -184,7 +297,8 @@ The SectionWidget rebuilds the list instantly showing the newly updated Pet Owne
 Summary of the Flow
 Unlike a standard Bloc app where the Bloc has to manually tell the UI to update its lists after a save, your architecture is strictly Data-Driven.
 
-Action Flow: UI ➔ FormCubit ➔ Repo ➔ Firebase Reactive Flow: Firebase ➔ Repo Stream ➔ SectionCubit ➔ UI List Rebuilds
+Action Flow: UI ➔ FormCubit ➔ Repo ➔ Firebase.
+Reactive Flow: Firebase ➔ Repo Stream ➔ SectionCubit ➔ UI List Rebuilds
 
 By using PetOwnerPluginState to hold the repo and cubit in static memory, that "Reactive Flow" stays alive in the background. Even if the user navigates away to the "Doctors" page and comes back, the data is instantly there without having to reload!
 

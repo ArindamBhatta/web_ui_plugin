@@ -19,7 +19,7 @@ class CustomizableSearchBar extends StatelessWidget {
       color:
           backgroundColor ??
           Theme.of(context).colorScheme.surfaceContainerLowest,
-      height: Globals.formFieldHeight,
+      height: AppTheme.formFieldHeight,
       child: TextField(
         textInputAction: TextInputAction.search,
         controller: controller,
