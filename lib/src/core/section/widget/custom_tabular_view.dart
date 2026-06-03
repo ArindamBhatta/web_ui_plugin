@@ -252,7 +252,10 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
   }
 
   List<DataRow> getRows(List<T> sortedItems) {
-    return sortedItems.map<DataRow>((item) {
+    return sortedItems.asMap().entries.map<DataRow>((entry) {
+      final index = entry.key;
+      final item = entry.value;
+
       final cells = widget.columns.map<DataCell>((col) {
         final child = col.customCellBuilder != null
             ? col.customCellBuilder!(item, context)
@@ -291,7 +294,18 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
         );
       }
 
+      final isEven = index % 2 == 0;
+      final baseColor = isEven
+          ? Colors.transparent
+          : Theme.of(context).colorScheme.primary.withValues(alpha: 0.015);
+
       return DataRow(
+        color: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.hovered)) {
+            return Theme.of(context).colorScheme.primary.withValues(alpha: 0.05);
+          }
+          return baseColor;
+        }),
         cells: cells,
       );
     }).toList();
@@ -340,93 +354,121 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
             });
           }
 
-          return Column(
-            children: [
-              Expanded(
-                child: sortedItems.isNotEmpty
-                    ? Scrollbar(
-                        controller: _horizontalScrollController,
-                        thumbVisibility: true,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          controller: _horizontalScrollController,
-                          child: Scrollbar(
-                            controller: _verticalScrollController,
-                            thumbVisibility: true,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              controller: _verticalScrollController,
-                              child: Theme(
-                                data: Theme.of(context).copyWith(
-                                  dividerTheme: DividerThemeData(
-                                    color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.4),
-                                  ),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: sortedItems.isNotEmpty
+                        ? Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.02),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
                                 ),
-                                child: DataTable(
-                                  columnSpacing: 32,
-                                  horizontalMargin: 16,
-                                  headingRowColor: WidgetStateProperty.resolveWith<Color?>((
-                                    Set<WidgetState> states,
-                                  ) {
-                                    return Theme.of(context).colorScheme.primary.withValues(alpha: 0.04);
-                                  }),
-                                  headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontSize: 14,
+                              ],
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            margin: const EdgeInsets.only(top: 8, bottom: 8),
+                            child: Scrollbar(
+                              controller: _horizontalScrollController,
+                              thumbVisibility: true,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                controller: _horizontalScrollController,
+                                child: Scrollbar(
+                                  controller: _verticalScrollController,
+                                  thumbVisibility: true,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    controller: _verticalScrollController,
+                                    child: Theme(
+                                      data: Theme.of(context).copyWith(
+                                        dividerTheme: DividerThemeData(
+                                          color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.4),
+                                        ),
+                                      ),
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minWidth: constraints.maxWidth - 2, // Account for border width
+                                        ),
+                                        child: DataTable(
+                                          columnSpacing: 32,
+                                          horizontalMargin: 24,
+                                          headingRowColor: WidgetStateProperty.resolveWith<Color?>((
+                                            Set<WidgetState> states,
+                                          ) {
+                                            return Theme.of(context).colorScheme.primary.withValues(alpha: 0.05);
+                                          }),
+                                          headingTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context).colorScheme.primary,
+                                            fontSize: 14,
+                                          ),
+                                          sortColumnIndex: _sortColumnIndex,
+                                          sortAscending: _sortAscending,
+                                          columns: getColumns(),
+                                          rows: getRows(sortedItems),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  sortColumnIndex: _sortColumnIndex,
-                                  sortAscending: _sortAscending,
-                                  columns: getColumns(),
-                                  rows: getRows(sortedItems),
                                 ),
                               ),
                             ),
+                          )
+                        : NoDataView(
+                            title: 'No ${widget.subSectionTitle} Found',
+                            subtitle: state.items.isEmpty
+                                ? 'Start adding ${widget.subSectionTitle.toLowerCase()}.'
+                                : 'No matching ${widget.subSectionTitle.toLowerCase()} found.',
+                            icon: Icons.search_outlined,
+                            iconColor: Theme.of(context).colorScheme.primary,
                           ),
-                        ),
-                      )
-                    : NoDataView(
-                        title: 'No ${widget.subSectionTitle} Found',
-                        subtitle: state.items.isEmpty
-                            ? 'Start adding ${widget.subSectionTitle.toLowerCase()}.'
-                            : 'No matching ${widget.subSectionTitle.toLowerCase()} found.',
-                        icon: Icons.search_outlined,
-                        iconColor: Theme.of(context).colorScheme.primary,
-                      ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(AppTheme.sidePadding),
-                child: Row(
-                  children: [
-                    if (state.items.isNotEmpty)
-                      Expanded(
-                        child: CustomizableSearchBar(
-                          controller: _searchController,
-                          onChanged: (value) {
-                            cubit!.search(value);
-                          },
-                        ),
-                      ),
-                    if (state.items.isNotEmpty && widget.editable)
-                      const SizedBox(width: 12),
-                    if (widget.editable)
-                      CustomButton(
-                        text: 'Add ${widget.subSectionTitle}',
-                        buttonType: ButtonType.secondary,
-                        height: AppTheme.formButtonHeight - 6,
-                        icon: Icons.add,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        elevation: 0,
-                        onPressed: () {
-                          _showAddDialog(widget.createEmptyModel());
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(AppTheme.sidePadding),
+                    child: Row(
+                      children: [
+                        if (state.items.isNotEmpty)
+                          Expanded(
+                            child: CustomizableSearchBar(
+                              controller: _searchController,
+                              onChanged: (value) {
+                                cubit!.search(value);
+                              },
+                            ),
+                          ),
+                        if (state.items.isNotEmpty && widget.editable)
+                          const SizedBox(width: 12),
+                        if (widget.editable)
+                          CustomButton(
+                            text: 'Add ${widget.subSectionTitle}',
+                            buttonType: ButtonType.secondary,
+                            height: AppTheme.formButtonHeight - 6,
+                            icon: Icons.add,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            elevation: 0,
+                            onPressed: () {
+                              _showAddDialog(widget.createEmptyModel());
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           );
         },
       ),
