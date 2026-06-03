@@ -1,5 +1,5 @@
 name: vet_application
-description: "Vet Application — SaaS veterinary clinic admin web app built on web_ui_plugins."
+description: "Vet Application — SaaS veterinary clinic admin web app built on web_ui_plugin."
 version: 1.0.0+1
 publish_to: "none"
 
@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   # The framework package (local path)
-  web_ui_plugins:
+  web_ui_plugin:
     path: ../..
 
   # Firebase (required by the package's Firebase adapter)

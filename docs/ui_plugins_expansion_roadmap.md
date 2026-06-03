@@ -1,6 +1,6 @@
 # Web UI Plugins — UI Expansion & Architecture Roadmap
 
-Currently, the `web_ui_plugins` package has a solid foundation for managing CRUD operations through two primary UI building blocks:
+Currently, the `web_ui_plugin` package has a solid foundation for managing CRUD operations through two primary UI building blocks:
 1. **`SectionWidget`**: A responsive, two-pane Master/Detail split layout (`CustomListView` and detailed pane).
 2. **`FormPageView`**: A declarative, form-driven editor with validation and dynamic field types (Text, Dropdown, Multi-select, Date, Time, Age).
 
@@ -192,18 +192,13 @@ class PluginBoardView<T extends DataModel, S extends Enum> extends StatelessWidg
 
 ## 4. Summary: How to Expand Your Codebase Step-by-Step
 
-To introduce these rich web capabilities into `web_ui_plugins`, follow this sequence:
+To introduce these rich web capabilities into `web_ui_plugin`, follow this sequence:
 
 ### Phase 1: Metric Cards & Dashboard Support
 1. Create `kpi_card_widget.dart` in `lib/src/core/widgets/`.
 2. Add a `dashboard` view to your bootstrap or example navigation that aggregates data across multiple `SectionRepo`s to show stats like "Total Active Doctors", "Total Registered Clients", and "Pending Bookings".
 
-### Phase 2: Card Grid (`PluginGridView`) — ✅ SUCCESSFULLY COMPLETED
-1. Create `plugin_grid_view.dart` in `lib/src/core/section/widget/`. (Done)
-2. Make it a drop-in replacement or configurable mode inside `SectionWidget` (e.g., `layoutMode: SectionLayoutMode.grid` or `SectionLayoutMode.list`). (Done)
-3. Add a responsive `GridCardWidget` that supports hover effects and glassmorphism styling. (Done)
-
-### Phase 3: Advanced Data Grid
+### Phase 2: Advanced Data Grid
 1. Integrate `data_table_2` or implement a clean responsive dynamic table in `lib/src/core/section/widget/plugin_table_view.dart`.
 2. Support full-width row selections, double-click to view details, and an `Export to CSV` action in the table headers.
 

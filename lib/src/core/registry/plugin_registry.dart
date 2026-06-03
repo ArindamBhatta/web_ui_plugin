@@ -1,4 +1,4 @@
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 /// Resolved and active plugin entry, stored after successful registration.
 class RegisteredPlugin<T extends DataModel> {

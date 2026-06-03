@@ -20,7 +20,7 @@ Targets multi-module SaaS products: clinic, medical admin, etc.
 
 ```
 lib/
-├── web_ui_plugins.dart          ← public barrel export (only file consumers import)
+├── web_ui_plugin.dart          ← public barrel export (only file consumers import)
 └── src/
     ├── core/
     │   ├── contracts/           ← backend-agnostic interfaces + shared config
@@ -80,7 +80,7 @@ lib/
 
 example/
 └── vet_clinic_web/                               ← reference consumer app
-    ├── pubspec.yaml                              ← depends on web_ui_plugins via path
+    ├── pubspec.yaml                              ← depends on web_ui_plugin via path
     └── lib/
         ├── main.dart                              ← 3-step app_bootstrap.run() and buildRouterApp()
         ├── app/

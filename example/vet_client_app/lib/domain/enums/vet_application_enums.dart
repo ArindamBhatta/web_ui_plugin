@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // ── Section enum ──────────────────────────────────────────────────────────────
 // The developer just adds values here; the plugin registry generates the sidebar.
 enum VetAppSection {
-  //Persona
+  dashboard,
   petOwners,
   doctors,
   technicians,
@@ -13,6 +13,8 @@ enum VetAppSection {
 extension VetAppSectionHelper on VetAppSection {
   String get label {
     switch (this) {
+      case VetAppSection.dashboard:
+        return 'Dashboard';
       case VetAppSection.petOwners:
         return 'Pet Owners';
       case VetAppSection.doctors:
@@ -24,6 +26,8 @@ extension VetAppSectionHelper on VetAppSection {
 
   IconData get icon {
     switch (this) {
+      case VetAppSection.dashboard:
+        return FontAwesomeIcons.chartPie;
       case VetAppSection.petOwners:
         return FontAwesomeIcons.person;
       case VetAppSection.doctors:
@@ -35,6 +39,8 @@ extension VetAppSectionHelper on VetAppSection {
 
   Color get color {
     switch (this) {
+      case VetAppSection.dashboard:
+        return Colors.purple;
       case VetAppSection.petOwners:
         return Colors.blue;
       case VetAppSection.doctors:
@@ -46,6 +52,8 @@ extension VetAppSectionHelper on VetAppSection {
 
   int get order {
     switch (this) {
+      case VetAppSection.dashboard:
+        return -1;
       case VetAppSection.petOwners:
         return 0;
       case VetAppSection.doctors:

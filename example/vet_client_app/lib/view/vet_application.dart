@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 /// The sidebar and routes are never hard-coded here; they come from registered plugins.
 class VetApplication extends StatelessWidget {

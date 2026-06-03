@@ -1,4 +1,4 @@
-/// web_ui_plugins — Plug-and-play SaaS admin UI package.
+/// web_ui_plugin — Plug-and-play SaaS admin UI package.
 ///
 /// To use this package:
 /// 1. Define your entity (implements [DataModel]).
@@ -63,6 +63,7 @@ export 'src/core/widgets/custom_snack_bar.dart';
 export 'src/core/widgets/custom_textfield.dart';
 export 'src/core/widgets/customizable_search_bar.dart';
 export 'src/core/widgets/package_enums.dart';
+export 'src/core/widgets/kpi_card_widget.dart';
 
 // ── Utility functions ─────────────────────────────────────────────────────────
 export 'src/core/functions/date_time_utils.dart';

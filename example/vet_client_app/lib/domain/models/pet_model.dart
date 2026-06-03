@@ -1,5 +1,5 @@
 // ignore_for_file: must_be_immutable
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 class PetModel extends DataModel {
   String? id;

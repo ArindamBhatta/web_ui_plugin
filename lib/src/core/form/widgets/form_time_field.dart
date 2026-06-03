@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class FormTimeField extends StatefulWidget {

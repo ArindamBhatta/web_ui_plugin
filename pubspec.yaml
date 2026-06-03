@@ -1,4 +1,4 @@
-name: web_ui_plugins
+name: web_ui_plugin
 description: "Plug-and-play SaaS admin UI plugin framework for Flutter Web. Firebase-first. Model + Enum + View = done."
 version: 0.1.0
 publish_to: "none"

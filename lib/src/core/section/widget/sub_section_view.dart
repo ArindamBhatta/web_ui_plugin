@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 class SubSectionView extends StatelessWidget {
   final DataModel? dataModel;

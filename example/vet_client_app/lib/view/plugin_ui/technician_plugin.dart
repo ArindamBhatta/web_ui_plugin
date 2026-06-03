@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vet_application/domain/enums/vet_application_enums.dart';
 import 'package:vet_application/domain/models/technician_model.dart';
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 final DefaultPluginDescription<TechnicianModel>
 technicianPlugin = DefaultPluginDescription<TechnicianModel>(

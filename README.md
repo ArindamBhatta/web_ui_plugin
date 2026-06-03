@@ -1,4 +1,4 @@
-# web_ui_plugins
+# web_ui_plugin
 
 ## 🚀 WebUI Plugins: The SaaS Builder's Dream
 

@@ -653,7 +653,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  web_ui_plugins:
+  web_ui_plugin:
     dependency: "direct main"
     description:
       path: "../.."

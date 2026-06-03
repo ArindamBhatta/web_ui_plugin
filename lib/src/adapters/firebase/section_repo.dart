@@ -1,4 +1,4 @@
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 /// Scoped repository: replaces old SectionRepo with a registry keyed by
 /// (moduleId + modelType + collection) instead of just (Type).

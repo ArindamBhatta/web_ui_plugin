@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:web_ui_plugins/web_ui_plugins.dart';
+import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 //PluginRouteBuilder is a function type that defines how to build a widget for a given route, using the current BuildContext and GoRouterState. if we pass wrong argument typedef stop us.
 typedef PluginRouteBuilder =
