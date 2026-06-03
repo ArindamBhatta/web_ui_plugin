@@ -85,7 +85,7 @@ class _FormPageViewState extends State<FormPageView> {
       return '${field.key}:${field.initialData?.uid ?? ''}';
     }
     if (field is MultiSelectWidgetConfig) {
-      final ids = field.initialDataSet?.map((e) => e.uid ?? '').join(',') ?? '';
+      final ids = field.initialDataSet?.map((e) => e.uid).join(',') ?? '';
       return '${field.key}:$ids';
     }
     return '${field.key}:${field.initialValue ?? ''}'; //status:Work In Progress
@@ -126,7 +126,7 @@ class _FormPageViewState extends State<FormPageView> {
       if (field is MultiSelectWidgetConfig) {
         final String key = field.key;
         final initialIds =
-            field.initialDataSet?.map((e) => e.uid ?? '').toList() ?? [];
+            field.initialDataSet?.map((e) => e.uid).toList() ?? [];
         final initialNames =
             field.initialDataSet?.map((e) => e.title ?? '').join(', ') ?? '';
         _formData['${key}Id'] = initialIds;
@@ -386,7 +386,7 @@ class _FormPageViewState extends State<FormPageView> {
                 child: SingleChildScrollView(
                   child: KeyedSubtree(
                     key: ValueKey(
-                      '${widget.dataModel.uid ?? 'new'}|$_formResetVersion',
+                      '${widget.dataModel.uid.isEmpty ? 'new' : widget.dataModel.uid}|$_formResetVersion',
                     ),
                     child: Form(
                       key: _formKey,
@@ -407,7 +407,7 @@ class _FormPageViewState extends State<FormPageView> {
                               .map((field) {
                                 return KeyedSubtree(
                                   key: ValueKey(
-                                    '${widget.dataModel.uid ?? 'new'}|${field.key}|$_formResetVersion',
+                                    '${widget.dataModel.uid.isEmpty ? 'new' : widget.dataModel.uid}|${field.key}|$_formResetVersion',
                                   ),
                                   child: getWidgetForFieldType(field),
                                 );
@@ -459,8 +459,7 @@ class _FormPageViewState extends State<FormPageView> {
 
                                   const Spacer(),
 
-                                  if ((widget.dataModel.uid == null ||
-                                          widget.dataModel.uid!.isEmpty) ||
+                                  if (widget.dataModel.uid.isEmpty ||
                                       widget.cancelButtonText != null) ...[
                                     CustomButton(
                                       text: widget.cancelButtonText ?? "Cancel",
@@ -881,7 +880,7 @@ class _FormPageViewState extends State<FormPageView> {
             : null,
         // onChange is not present previously
         onChanged: (List<DataModel>? selectedItems) {
-          final ids = selectedItems?.map((e) => e.uid ?? '').toList() ?? [];
+          final ids = selectedItems?.map((e) => e.uid).toList() ?? [];
           final names =
               selectedItems?.map((e) => e.title ?? '').join(', ') ?? '';
           _formData['${key}Id'] = ids;

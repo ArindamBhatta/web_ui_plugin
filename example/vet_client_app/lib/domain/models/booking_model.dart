@@ -49,7 +49,7 @@ class BookingModel extends DataModel {
   }
 
   @override
-  String? get uid => id;
+  String get uid => id ?? '';
 
   @override
   String? get title => 'Appointment: $doctorName';

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 abstract class DataModel extends Equatable {
-  String? get uid; // not null
+  String get uid;
   String? get title;
   String? get subTitle;
 

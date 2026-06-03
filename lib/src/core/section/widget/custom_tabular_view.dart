@@ -99,7 +99,7 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
 
   void _showAddDialog(T data) {
     String dialogTitle =
-        '${data.uid != null ? "Edit" : "Add New"} ${widget.subSectionTitle}';
+        '${data.uid.isNotEmpty ? "Edit" : "Add New"} ${widget.subSectionTitle}';
     showDialog(
       context: context,
       useRootNavigator: false,

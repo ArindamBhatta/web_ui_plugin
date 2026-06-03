@@ -7,7 +7,7 @@ class DashboardModel extends DataModel {
   DashboardModel({this.id = 'dashboard'});
 
   @override
-  String? get uid => id;
+  String get uid => id ?? 'dashboard';
 
   @override
   String? get title => 'Dashboard';

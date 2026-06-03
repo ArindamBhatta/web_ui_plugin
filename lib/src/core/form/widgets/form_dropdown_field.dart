@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:web_ui_plugin/src/core/widgets/package_enums.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 class FormDropdownField<T extends DataModel> extends StatefulWidget {
@@ -328,16 +327,14 @@ class _FormDropdownFieldState<T extends DataModel>
     }
   }
 
-  int _compareIds(String? a, String? b) {
-    final aId = a ?? '';
-    final bId = b ?? '';
-    final aAsNum = int.tryParse(aId);
-    final bAsNum = int.tryParse(bId);
+  int _compareIds(String a, String b) {
+    final aAsNum = int.tryParse(a);
+    final bAsNum = int.tryParse(b);
 
     if (aAsNum != null && bAsNum != null) {
       return aAsNum.compareTo(bAsNum);
     }
 
-    return aId.toLowerCase().compareTo(bId.toLowerCase());
+    return a.toLowerCase().compareTo(b.toLowerCase());
   }
 }

@@ -1,0 +1,14 @@
+# Ignore Firebase and local debug files
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
+storage.rules
+*-debug.log
+emulator-data/
+firebase-export-*/
+.vscode/
+.dart_tool/
+.metadata
+build/
+web/

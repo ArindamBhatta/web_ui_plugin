@@ -88,7 +88,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
         (e) => e.uid == widget.initialSelectedItemId,
         orElse: () => widget.createEmptyModel.call(),
       );
-      if (item.uid != null) {
+      if (item.uid.isNotEmpty) {
         cubit.selectItem(item);
       }
     }
@@ -240,7 +240,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
                   widget.initialTabDetailBuilder(selected, context),
                   ...(widget.extraTabViewsBuilder?.call(selected) ??
                           const <Widget Function(String itemId)>[])
-                      .map((builder) => builder(selected.uid!)),
+                      .map((builder) => builder(selected.uid)),
                 ],
               ),
             ),
@@ -516,7 +516,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
                                               ) ??
                                               const <Widget Function(String)>[])
                                           .map(
-                                            (builder) => builder(selected.uid!),
+                                            (builder) => builder(selected.uid),
                                           ),
                                     ],
                                   )

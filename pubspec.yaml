@@ -1,7 +1,7 @@
 name: web_ui_plugin
 description: "Plug-and-play SaaS admin UI plugin framework for Flutter Web. Firebase-first. Model + Enum + View = done."
 version: 0.1.0
-publish_to: "none"
+repository: https://github.com/ArindamBhatta/MediAdminForm
 
 environment:
   sdk: ^3.9.0
@@ -47,3 +47,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+false_secrets:
+  - "example/vet_client_app/lib/main.dart"

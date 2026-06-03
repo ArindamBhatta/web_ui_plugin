@@ -40,7 +40,7 @@ class PetModel extends DataModel {
   }
 
   @override
-  String? get uid => id;
+  String get uid => id ?? '';
 
   @override
   String? get title => name;

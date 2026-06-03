@@ -136,10 +136,10 @@ Issues found during architecture review (April 2026). Ordered by severity.
 
 ## Application Images
 
-<img src="docs/assets/images/img_1.png" width="900"/>      |
-<img src="docs/assets/images/img_2.png" width="900"/>      |
-<img src="docs/assets/images/img_3.png" width="900"/>      |
-<img src="docs/assets/images/img_4.png" width="900"/>      |
+<img src="doc/assets/images/img_1.png" width="900"/>      |
+<img src="doc/assets/images/img_2.png" width="900"/>      |
+<img src="doc/assets/images/img_3.png" width="900"/>      |
+<img src="doc/assets/images/img_4.png" width="900"/>      |
 
 
 
