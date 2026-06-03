@@ -3,9 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
-// Cubit for Section UI state
-
-// Section widget
 class SectionWidget<T extends DataModel> extends StatefulWidget {
   final String sectionLabel;
   final IconData sectionIcon;
@@ -25,15 +22,22 @@ class SectionWidget<T extends DataModel> extends StatefulWidget {
 
   final List<String> Function(T item)?
   filterExtraTabs; //use filterExtraTabs: (TT) => ["XYZ"]
+
   final List<Widget Function(String itemId)> Function(T item)?
   extraTabViewsBuilder; //use extraTabViewsBuilder: (TT) => [(itemId) => PlaceHolder()]
 
   final T Function() createEmptyModel;
+
   final DataModel Function(Map<String, dynamic> data) rebuildDataModel;
+
   final String? initialSelectedItemId;
+
   final bool showAddButton;
+
   final Set<String> initialSelectedStatuses;
+
   final String firstTabLabel;
+
   final SectionLayoutMode defaultLayoutMode;
 
   const SectionWidget({
@@ -255,7 +259,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.surfaceContainerLow,
-              child: SubSectionView(
+              child: DetailViewInfoSection(
                 dataModel: selected,
                 footerActionButtons:
                     widget.footerActionButtons?.call(context, selected) ??
@@ -296,7 +300,9 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
             }
             final GoRouterState routerState = GoRouterState.of(context);
             final currentPath = routerState.uri.path;
-            final expectedPath = selectedUid != null ? '$basePath/$selectedUid' : basePath;
+            final expectedPath = selectedUid != null
+                ? '$basePath/$selectedUid'
+                : basePath;
             if (currentPath != expectedPath) {
               context.go(expectedPath);
             }
@@ -304,7 +310,9 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
           final bool isMobile = MediaQuery.of(context).size.width < 900;
           if (state.selectedItem == null && _mobileViewingDetail) {
             setState(() => _mobileViewingDetail = false);
-          } else if (state.selectedItem != null && isMobile && !_mobileViewingDetail) {
+          } else if (state.selectedItem != null &&
+              isMobile &&
+              !_mobileViewingDetail) {
             setState(() => _mobileViewingDetail = true);
           }
         },
@@ -543,7 +551,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
                             final selected = state.selectedItem;
 
                             return selected != null
-                                ? SubSectionView(
+                                ? DetailViewInfoSection(
                                     dataModel: selected,
                                     footerActionButtons:
                                         widget.footerActionButtons?.call(
@@ -606,7 +614,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
             );
           }
 
-          return SectionView(
+          return SectionNavbarView(
             sectionLabel: widget.sectionLabel,
             sectionIcon: widget.sectionIcon,
             sectionColor: widget.sectionColor,

@@ -7,7 +7,7 @@ import 'app_colors.dart';
 import 'theme_extensions.dart';
 
 class AppTheme {
-  // Spacing & Sizing Constants migrated from Globals
+  // Form Spacing & Sizing as Per Web Screen
   static const double formFieldGap = 16.0;
   static const double formFieldHeight = 40.0;
   static const double formButtonHeight = 40.0;

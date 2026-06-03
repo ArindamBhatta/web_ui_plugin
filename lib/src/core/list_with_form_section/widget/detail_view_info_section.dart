@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
-class SubSectionView extends StatelessWidget {
+//Show Tab and TabBar view
+class DetailViewInfoSection extends StatelessWidget {
   final DataModel? dataModel;
   final List<Tab>? tabs;
   final List<Widget>? tabViews;
   final List<CustomButton> footerActionButtons;
 
-  const SubSectionView({
+  const DetailViewInfoSection({
     super.key,
     this.dataModel,
     this.tabs,

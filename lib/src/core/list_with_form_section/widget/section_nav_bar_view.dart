@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
-class SectionView extends StatelessWidget {
+class SectionNavbarView extends StatelessWidget {
   final Widget child;
   final String sectionLabel;
   final IconData sectionIcon;
   final Color sectionColor;
   final List<Widget>? headerLeftActions;
-  final List<Widget>? headerCenterActions;
   final List<Widget>? headerRightActions;
   final double headerLeftActionsInset;
   final List<Widget>? actions;
 
-  const SectionView({
+  const SectionNavbarView({
     super.key,
     required this.child,
     required this.sectionLabel,
     required this.sectionIcon,
     required this.sectionColor,
     this.headerLeftActions,
-    this.headerCenterActions,
     this.headerRightActions,
     this.headerLeftActionsInset = 0,
     this.actions,
@@ -59,26 +57,15 @@ class SectionView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: headerLeftActionsInset),
                     child: Row(
-                      spacing: AppTheme.sidePadding / 2,
+                      spacing: AppTheme.spacingS,
                       children: headerLeftActions!,
                     ),
                   ),
                 ],
                 const Spacer(),
-                if (headerCenterActions != null &&
-                    headerCenterActions!.isNotEmpty) ...[
-                  Row(
-                    spacing: AppTheme.sidePadding / 2,
-                    children: headerCenterActions!,
-                  ),
-                  const Spacer(),
-                ],
                 if (headerRightActions != null &&
                     headerRightActions!.isNotEmpty)
-                  Row(
-                    spacing: AppTheme.sidePadding / 2,
-                    children: headerRightActions!,
-                  )
+                  Row(spacing: AppTheme.spacingS, children: headerRightActions!)
                 else if (actions != null)
                   Row(spacing: AppTheme.sidePadding, children: actions!),
               ],
@@ -89,7 +76,7 @@ class SectionView extends StatelessWidget {
         Expanded(
           child: Container(
             color: Theme.of(context).colorScheme.surfaceContainerLow,
-            child: child, //Pass the child eg(SubSectionView)
+            child: child,
           ),
         ),
       ],

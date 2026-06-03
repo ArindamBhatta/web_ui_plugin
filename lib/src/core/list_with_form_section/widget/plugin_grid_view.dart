@@ -98,7 +98,8 @@ class _PluginGridViewState extends State<PluginGridView> {
 
         return GridCardWidget(
           title: widget.defaultTitle ?? dataItem.title ?? 'No Title',
-          subTitle: widget.defaultSubTitle ?? dataItem.subTitle ?? 'No Subtitle',
+          subTitle:
+              widget.defaultSubTitle ?? dataItem.subTitle ?? 'No Subtitle',
           isSelected: isSelected,
           status: status,
           sectionColor: widget.sectionColor,
@@ -171,8 +172,8 @@ class _GridCardWidgetState extends State<GridCardWidget> {
     final cardBorderColor = widget.isSelected
         ? widget.sectionColor
         : (_isHovered
-            ? widget.sectionColor.withOpacity(0.5)
-            : theme.colorScheme.outline.withOpacity(0.15));
+              ? widget.sectionColor.withOpacity(0.5)
+              : theme.colorScheme.outline.withOpacity(0.15));
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -195,8 +196,8 @@ class _GridCardWidgetState extends State<GridCardWidget> {
             color: widget.isSelected
                 ? widget.sectionColor.withOpacity(0.04)
                 : (_isHovered
-                    ? theme.colorScheme.surfaceContainerHigh
-                    : theme.colorScheme.surfaceContainerLow),
+                      ? theme.colorScheme.surfaceContainerHigh
+                      : theme.colorScheme.surfaceContainerLow),
             boxShadow: [
               BoxShadow(
                 color: _isHovered
@@ -301,10 +302,12 @@ class _GridCardWidgetState extends State<GridCardWidget> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.85),
+                          color: theme.colorScheme.onSurfaceVariant.withOpacity(
+                            0.85,
+                          ),
                         ),
                       ),
-                      
+
                       const Spacer(),
 
                       // Subtle interactive bottom indicator/action
@@ -316,18 +319,24 @@ class _GridCardWidgetState extends State<GridCardWidget> {
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: _isHovered
                                   ? widget.sectionColor
-                                  : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-                              fontWeight: _isHovered ? FontWeight.bold : FontWeight.normal,
+                                  : theme.colorScheme.onSurfaceVariant
+                                        .withOpacity(0.5),
+                              fontWeight: _isHovered
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
                           AnimatedTranslation(
-                            offset: _isHovered ? const Offset(2, 0) : Offset.zero,
+                            offset: _isHovered
+                                ? const Offset(2, 0)
+                                : Offset.zero,
                             child: Icon(
                               Icons.arrow_forward_rounded,
                               size: 14,
                               color: _isHovered
                                   ? widget.sectionColor
-                                  : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                                  : theme.colorScheme.onSurfaceVariant
+                                        .withOpacity(0.5),
                             ),
                           ),
                         ],

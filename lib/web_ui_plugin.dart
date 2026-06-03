@@ -46,15 +46,15 @@ export 'src/core/form/widgets/form_age_field.dart';
 export 'src/core/form/repo/form_repo_mixin.dart';
 
 // ── Section layer (cubit + state + widgets) ───────────────────────────────────
-export 'src/core/section/cubit/section_cubit.dart';
-export 'src/core/section/widget/section_view.dart';
-export 'src/core/section/widget/section_widget.dart';
-export 'src/core/section/widget/sub_section_view.dart';
-export 'src/core/section/widget/custom_list_view.dart';
-export 'src/core/section/widget/custom_list_tile.dart';
-export 'src/core/section/widget/plugin_grid_view.dart';
-export 'src/core/section/widget/no_data_view.dart';
-export 'src/core/section/widget/custom_tabular_view.dart';
+export 'src/core/list_with_form_section/cubit/section_cubit.dart';
+export 'src/core/list_with_form_section/widget/section_nav_bar_view.dart';
+export 'src/core/list_with_form_section/widget/section_widget.dart';
+export 'src/core/list_with_form_section/widget/detail_view_info_section.dart';
+export 'src/core/list_with_form_section/widget/custom_list_view.dart';
+export 'src/core/list_with_form_section/widget/custom_list_tile.dart';
+export 'src/core/list_with_form_section/widget/plugin_grid_view.dart';
+export 'src/core/list_with_form_section/widget/no_data_view.dart';
+export 'src/core/list_with_form_section/widget/custom_tabular_view.dart';
 
 // ── Shared UI primitives ──────────────────────────────────────────────────────
 export 'src/core/widgets/custom_button.dart';

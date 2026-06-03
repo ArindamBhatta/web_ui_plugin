@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_ui_plugin/src/core/section/widget/custom_list_tile.dart';
+import 'package:web_ui_plugin/src/core/list_with_form_section/widget/custom_list_tile.dart';
 import 'package:web_ui_plugin/src/core/widgets/package_enums.dart';
 import 'package:web_ui_plugin/src/core/contracts/data_model.dart';
 

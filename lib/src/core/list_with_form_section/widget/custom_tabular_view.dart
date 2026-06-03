@@ -159,7 +159,7 @@ class _CustomTabularViewState<T extends DataModel>
         return CustomDialogBox(
           title: 'Confirm Deletion',
           width: 400,
-          height: 180,
+          height: 150,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
