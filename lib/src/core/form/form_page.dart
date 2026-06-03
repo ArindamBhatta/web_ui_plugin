@@ -36,6 +36,8 @@ class FormPageView extends StatefulWidget {
   final VoidCallback? onSaveSuccess;
   final bool supportsCrud;
 
+  final String? snackBarEntityName;
+
   const FormPageView({
     super.key,
     required this.formCubit,
@@ -48,6 +50,7 @@ class FormPageView extends StatefulWidget {
     this.onCancel,
     this.onSaveSuccess,
     this.supportsCrud = true,
+    this.snackBarEntityName,
   });
 
   @override
@@ -340,10 +343,14 @@ class _FormPageViewState extends State<FormPageView> {
         _isDataMismatch = false;
         SectionCubit.hasUnsavedFormChanges = false;
 
+        final bool isEdit = currentItemId != null && currentItemId.isNotEmpty;
+        final String action = isEdit ? "updated" : "created";
+        final String entity = widget.snackBarEntityName ?? "Data";
+
         if (mounted) {
           CustomSnackBar.show(
             context,
-            "Saved successfully.",
+            "$entity $action successfully!",
             category: SnackBarCategory.success,
           );
         }
@@ -355,7 +362,7 @@ class _FormPageViewState extends State<FormPageView> {
           CustomSnackBar.show(
             context,
             "Error saving data: $e",
-            category: SnackBarCategory.error,
+            category: SnackBarCategory.failure,
           );
         }
         return false;
@@ -364,7 +371,7 @@ class _FormPageViewState extends State<FormPageView> {
       CustomSnackBar.show(
         context,
         "Please correct the errors in the form.",
-        category: SnackBarCategory.error,
+        category: SnackBarCategory.failure,
       );
       return false;
     }
@@ -469,7 +476,8 @@ class _FormPageViewState extends State<FormPageView> {
                                       onPressed: () {
                                         if (_isDataMismatch) {
                                           _showUnsavedChangesLostSnackBar();
-                                          SectionCubit.hasUnsavedFormChanges = false;
+                                          SectionCubit.hasUnsavedFormChanges =
+                                              false;
                                         }
 
                                         if (widget.onCancel != null) {

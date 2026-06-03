@@ -164,6 +164,14 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
               fields: initialFormPage?.fields ?? [],
               rebuildDataModel: widget.rebuildDataModel,
               primaryButtonText: initialFormPage?.primaryButtonText ?? "Add",
+              snackBarEntityName:
+                  initialFormPage?.snackBarEntityName ??
+                  (widget.sectionTitle.endsWith('s')
+                      ? widget.sectionTitle.substring(
+                          0,
+                          widget.sectionTitle.length - 1,
+                        )
+                      : widget.sectionTitle),
               onSaveSuccess: () {
                 Navigator.of(ctx).pop();
               },

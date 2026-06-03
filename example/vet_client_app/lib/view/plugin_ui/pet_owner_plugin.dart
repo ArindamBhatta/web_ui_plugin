@@ -62,27 +62,25 @@ class PetOwnerPluginState {
 class PetPluginState {
   static final DefaultPluginDescription<PetModel> descriptor =
       DefaultPluginDescription<PetModel>(
-    moduleId: 'pets',
-    title: 'Pets',
-    icon: FontAwesomeIcons.dog,
-    color: Colors.blue,
-    features: const PluginFeatureFlags(
-      supportsCrud: true,
-      supportsRealtime: true,
-    ),
-    dataBinding: PluginDataBinding<PetModel>(
-      collectionName: 'pets',
-      fromJson: PetModel.fromJson,
-      createEmpty: PetModel.new,
-    ),
-  );
+        moduleId: 'pets',
+        title: 'Pets',
+        icon: FontAwesomeIcons.dog,
+        color: Colors.blue,
+        features: const PluginFeatureFlags(
+          supportsCrud: true,
+          supportsRealtime: true,
+        ),
+        dataBinding: PluginDataBinding<PetModel>(
+          collectionName: 'pets',
+          fromJson: PetModel.fromJson,
+          createEmpty: PetModel.new,
+        ),
+      );
 
   static final SectionRepo<PetModel> repo =
       SectionRepo<PetModel>.fromDescriptor(descriptor);
 
-  static final FormCubit<PetModel> cubit = FormCubit<PetModel>(
-    repo: repo,
-  );
+  static final FormCubit<PetModel> cubit = FormCubit<PetModel>(repo: repo);
 }
 
 class PetOwnerPluginPage extends StatelessWidget {
@@ -109,81 +107,82 @@ class PetOwnerPluginPage extends StatelessWidget {
 
       extraTabViewsBuilder: (petOwner) => [
         (ownerId) => CustomTabularView<PetModel>(
-              repo: PetPluginState.repo,
-              formCubit: PetPluginState.cubit,
-              subSectionTitle: 'Pets',
-              createEmptyModel: () => PetModel(ownerId: ownerId),
-              filterFunction: (items) =>
-                  items.where((pet) => pet.ownerId == ownerId).toList(),
-              columns: [
-                TabularColumn<PetModel>(
-                  label: 'Pet Name',
-                  valueMapper: (pet) => pet.name ?? 'Unknown',
-                ),
-                TabularColumn<PetModel>(
-                  label: 'Species',
-                  valueMapper: (pet) => pet.species ?? 'Unknown',
-                ),
-                TabularColumn<PetModel>(
-                  label: 'Breed',
-                  valueMapper: (pet) => pet.breed ?? 'Unknown',
-                ),
-                TabularColumn<PetModel>(
-                  label: 'Age (Years)',
-                  valueMapper: (pet) => pet.age?.toString() ?? 'N/A',
-                  sortValueMapper: (pet) => pet.age ?? 0,
-                ),
-              ],
-              detailBuilder: (pet, ctx) => FormPageView(
-                formCubit: PetPluginState.cubit,
-                dataModel: pet,
-                supportsCrud: true,
-                fields: [
-                  WidgetConfig(
-                    key: 'name',
-                    fieldType: FieldType.name,
-                    labelText: 'Pet Name',
-                    initialValue: pet.name,
-                    mandatory: true,
-                    icon: FontAwesomeIcons.dog,
-                  ),
-                  WidgetConfig(
-                    key: 'species',
-                    fieldType: FieldType.general,
-                    labelText: 'Species',
-                    initialValue: pet.species,
-                    mandatory: true,
-                    icon: FontAwesomeIcons.paw,
-                  ),
-                  WidgetConfig(
-                    key: 'breed',
-                    fieldType: FieldType.general,
-                    labelText: 'Breed',
-                    initialValue: pet.breed,
-                    mandatory: false,
-                    icon: FontAwesomeIcons.dna,
-                  ),
-                  WidgetConfig(
-                    key: 'age',
-                    fieldType: FieldType.general,
-                    labelText: 'Age',
-                    initialValue: pet.age?.toString(),
-                    mandatory: false,
-                    icon: FontAwesomeIcons.clock,
-                  ),
-                ],
-                rebuildDataModel: (data) => PetModel(
-                  id: data['id'] as String?,
-                  ownerId: ownerId,
-                  name: data['name'] as String?,
-                  species: data['species'] as String?,
-                  breed: data['breed'] as String?,
-                  age: data['age'] is int
-                      ? data['age'] as int
-                      : int.tryParse(data['age']?.toString() ?? ''),
-                ),
-              ),
+          repo: PetPluginState.repo,
+          formCubit: PetPluginState.cubit,
+          subSectionTitle: 'Pets',
+          createEmptyModel: () => PetModel(ownerId: ownerId),
+          filterFunction: (items) =>
+              items.where((pet) => pet.ownerId == ownerId).toList(),
+          columns: [
+            TabularColumn<PetModel>(
+              label: 'Pet Name',
+              valueMapper: (pet) => pet.name ?? 'Unknown',
             ),
+            TabularColumn<PetModel>(
+              label: 'Species',
+              valueMapper: (pet) => pet.species ?? 'Unknown',
+            ),
+            TabularColumn<PetModel>(
+              label: 'Breed',
+              valueMapper: (pet) => pet.breed ?? 'Unknown',
+            ),
+            TabularColumn<PetModel>(
+              label: 'Age (Years)',
+              valueMapper: (pet) => pet.age?.toString() ?? 'N/A',
+              sortValueMapper: (pet) => pet.age ?? 0,
+            ),
+          ],
+          detailBuilder: (pet, ctx) => FormPageView(
+            formCubit: PetPluginState.cubit,
+            dataModel: pet,
+            supportsCrud: true,
+            snackBarEntityName: 'Pet',
+            fields: [
+              WidgetConfig(
+                key: 'name',
+                fieldType: FieldType.name,
+                labelText: 'Pet Name',
+                initialValue: pet.name,
+                mandatory: true,
+                icon: FontAwesomeIcons.dog,
+              ),
+              WidgetConfig(
+                key: 'species',
+                fieldType: FieldType.general,
+                labelText: 'Species',
+                initialValue: pet.species,
+                mandatory: true,
+                icon: FontAwesomeIcons.paw,
+              ),
+              WidgetConfig(
+                key: 'breed',
+                fieldType: FieldType.general,
+                labelText: 'Breed',
+                initialValue: pet.breed,
+                mandatory: false,
+                icon: FontAwesomeIcons.dna,
+              ),
+              WidgetConfig(
+                key: 'age',
+                fieldType: FieldType.general,
+                labelText: 'Age',
+                initialValue: pet.age?.toString(),
+                mandatory: false,
+                icon: FontAwesomeIcons.clock,
+              ),
+            ],
+            rebuildDataModel: (data) => PetModel(
+              id: data['id'] as String?,
+              ownerId: ownerId,
+              name: data['name'] as String?,
+              species: data['species'] as String?,
+              breed: data['breed'] as String?,
+              age: data['age'] is int
+                  ? data['age'] as int
+                  : int.tryParse(data['age']?.toString() ?? ''),
+            ),
+          ),
+        ),
       ],
 
       rebuildDataModel: (data) => PetOwnerModel(
@@ -199,6 +198,7 @@ class PetOwnerPluginPage extends StatelessWidget {
         formCubit: BlocProvider.of<FormCubit<PetOwnerModel>>(ctx),
         dataModel: item,
         supportsCrud: petOwnerPlugin.features.supportsCrud,
+        snackBarEntityName: 'Pet Owner',
         fields: [
           WidgetConfig(
             key: 'name',

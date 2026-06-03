@@ -18,16 +18,16 @@ import 'pet_owner_plugin.dart';
 class BookingPluginState {
   static final DefaultPluginDescription<BookingModel> descriptor =
       DefaultPluginDescription<BookingModel>(
-    moduleId: 'bookings',
-    title: 'Bookings',
-    icon: FontAwesomeIcons.calendarCheck,
-    color: Colors.amber,
-    dataBinding: PluginDataBinding<BookingModel>(
-      collectionName: 'bookings',
-      fromJson: BookingModel.fromJson,
-      createEmpty: BookingModel.new,
-    ),
-  );
+        moduleId: 'bookings',
+        title: 'Bookings',
+        icon: FontAwesomeIcons.calendarCheck,
+        color: Colors.amber,
+        dataBinding: PluginDataBinding<BookingModel>(
+          collectionName: 'bookings',
+          fromJson: BookingModel.fromJson,
+          createEmpty: BookingModel.new,
+        ),
+      );
 
   static final SectionRepo<BookingModel> repo =
       SectionRepo<BookingModel>.fromDescriptor(descriptor);
@@ -40,32 +40,33 @@ class BookingPluginState {
 /// Dashboard plugin descriptor registered in bootstrap.
 final DefaultPluginDescription<DashboardModel> dashboardPlugin =
     DefaultPluginDescription<DashboardModel>(
-  moduleId: 'dashboard',
-  title: VetAppSection.dashboard.label,
-  icon: VetAppSection.dashboard.icon,
-  color: VetAppSection.dashboard.color,
-  order: VetAppSection.dashboard.order,
-  features: const PluginFeatureFlags(
-    supportsCrud: false,
-    supportsRealtime: false,
-    supportsUpload: false,
-  ),
-  visibilityPolicy: PersonaPermissionPolicy({
-    VetApplicationEnums.admin.label,
-    VetApplicationEnums.operator.label,
-  }),
-  dataBinding: PluginDataBinding<DashboardModel>(
-    collectionName: 'dashboard',
-    fromJson: (_) => DashboardModel(),
-    createEmpty: () => DashboardModel(),
-  ),
-  routes: [
-    SingleRouteDescriptionAndPolicy(
-      path: '/dashboard',
-      builder: (BuildContext ctx, GoRouterState state) => const DashboardPage(),
-    ),
-  ],
-);
+      moduleId: 'dashboard',
+      title: VetAppSection.dashboard.label,
+      icon: VetAppSection.dashboard.icon,
+      color: VetAppSection.dashboard.color,
+      order: VetAppSection.dashboard.order,
+      features: const PluginFeatureFlags(
+        supportsCrud: false,
+        supportsRealtime: false,
+        supportsUpload: false,
+      ),
+      visibilityPolicy: PersonaPermissionPolicy({
+        VetApplicationEnums.admin.label,
+        VetApplicationEnums.operator.label,
+      }),
+      dataBinding: PluginDataBinding<DashboardModel>(
+        collectionName: 'dashboard',
+        fromJson: (_) => DashboardModel(),
+        createEmpty: () => DashboardModel(),
+      ),
+      routes: [
+        SingleRouteDescriptionAndPolicy(
+          path: '/dashboard',
+          builder: (BuildContext ctx, GoRouterState state) =>
+              const DashboardPage(),
+        ),
+      ],
+    );
 
 /// A beautifully crafted dashboard screen that aggregates data across:
 /// 1. DoctorsPluginState.repo (Active Doctors)
@@ -138,9 +139,33 @@ class _DashboardPageState extends State<DashboardPage> {
       // 1. Seed doctors if empty
       if (DoctorsPluginState.repo.items.isEmpty) {
         final doctors = [
-          DoctorModel(id: 'doc1', active: 'true', name: 'Dr. Helen Carter', qualifications: 'DVM, Ph.D', mobile: '9876543210', email: 'helen.carter@vet.com', fee: '150'),
-          DoctorModel(id: 'doc2', active: 'true', name: 'Dr. Alex Mercer', qualifications: 'DVM, Specialist', mobile: '9876543211', email: 'alex.mercer@vet.com', fee: '120'),
-          DoctorModel(id: 'doc3', active: 'false', name: 'Dr. Sarah Connor', qualifications: 'B.V.Sc', mobile: '9876543212', email: 'sarah.connor@vet.com', fee: '100'),
+          DoctorModel(
+            id: 'doc1',
+            active: 'true',
+            name: 'Dr. Helen Carter',
+            qualifications: 'DVM, Ph.D',
+            mobile: '9876543210',
+            email: 'helen.carter@vet.com',
+            fee: '150',
+          ),
+          DoctorModel(
+            id: 'doc2',
+            active: 'true',
+            name: 'Dr. Alex Mercer',
+            qualifications: 'DVM, Specialist',
+            mobile: '9876543211',
+            email: 'alex.mercer@vet.com',
+            fee: '120',
+          ),
+          DoctorModel(
+            id: 'doc3',
+            active: 'false',
+            name: 'Dr. Sarah Connor',
+            qualifications: 'B.V.Sc',
+            mobile: '9876543212',
+            email: 'sarah.connor@vet.com',
+            fee: '100',
+          ),
         ];
         for (var doc in doctors) {
           await DoctorsPluginState.repo.create(doc);
@@ -150,8 +175,20 @@ class _DashboardPageState extends State<DashboardPage> {
       // 2. Seed pet owners if empty
       if (PetOwnerPluginState.repo.items.isEmpty) {
         final owners = [
-          PetOwnerModel(id: 'owner1', name: 'Alice Smith', address: '123 Pine St', mobile: '9988776655', email: 'alice@gmail.com'),
-          PetOwnerModel(id: 'owner2', name: 'Bob Johnson', address: '456 Elm St', mobile: '9988776656', email: 'bob@gmail.com'),
+          PetOwnerModel(
+            id: 'owner1',
+            name: 'Alice Smith',
+            address: '123 Pine St',
+            mobile: '9988776655',
+            email: 'alice@gmail.com',
+          ),
+          PetOwnerModel(
+            id: 'owner2',
+            name: 'Bob Johnson',
+            address: '456 Elm St',
+            mobile: '9988776656',
+            email: 'bob@gmail.com',
+          ),
         ];
         for (var owner in owners) {
           await PetOwnerPluginState.repo.create(owner);
@@ -159,9 +196,30 @@ class _DashboardPageState extends State<DashboardPage> {
 
         // Seed pets
         final pets = [
-          PetModel(id: 'pet1', ownerId: 'owner1', name: 'Max', species: 'Dog', breed: 'Golden Retriever', age: 3),
-          PetModel(id: 'pet2', ownerId: 'owner1', name: 'Luna', species: 'Cat', breed: 'Siamese', age: 2),
-          PetModel(id: 'pet3', ownerId: 'owner2', name: 'Rocky', species: 'Dog', breed: 'German Shepherd', age: 5),
+          PetModel(
+            id: 'pet1',
+            ownerId: 'owner1',
+            name: 'Max',
+            species: 'Dog',
+            breed: 'Golden Retriever',
+            age: 3,
+          ),
+          PetModel(
+            id: 'pet2',
+            ownerId: 'owner1',
+            name: 'Luna',
+            species: 'Cat',
+            breed: 'Siamese',
+            age: 2,
+          ),
+          PetModel(
+            id: 'pet3',
+            ownerId: 'owner2',
+            name: 'Rocky',
+            species: 'Dog',
+            breed: 'German Shepherd',
+            age: 5,
+          ),
         ];
         for (var pet in pets) {
           await PetPluginState.repo.create(pet);
@@ -171,18 +229,53 @@ class _DashboardPageState extends State<DashboardPage> {
       // 3. Seed bookings if empty
       if (BookingPluginState.repo.items.isEmpty) {
         final bookings = [
-          BookingModel(id: 'book1', petOwnerId: 'owner1', petOwnerName: 'Alice Smith', doctorId: 'doc1', doctorName: 'Dr. Helen Carter', date: '2026-06-02', time: '10:00 AM', status: 'scheduled'),
-          BookingModel(id: 'book2', petOwnerId: 'owner2', petOwnerName: 'Bob Johnson', doctorId: 'doc2', doctorName: 'Dr. Alex Mercer', date: '2026-06-02', time: '11:30 AM', status: 'inProgress'),
-          BookingModel(id: 'book3', petOwnerId: 'owner1', petOwnerName: 'Alice Smith', doctorId: 'doc2', doctorName: 'Dr. Alex Mercer', date: '2026-06-01', time: '03:00 PM', status: 'completed'),
+          BookingModel(
+            id: 'book1',
+            petOwnerId: 'owner1',
+            petOwnerName: 'Alice Smith',
+            doctorId: 'doc1',
+            doctorName: 'Dr. Helen Carter',
+            date: '2026-06-02',
+            time: '10:00 AM',
+            status: 'scheduled',
+          ),
+          BookingModel(
+            id: 'book2',
+            petOwnerId: 'owner2',
+            petOwnerName: 'Bob Johnson',
+            doctorId: 'doc2',
+            doctorName: 'Dr. Alex Mercer',
+            date: '2026-06-02',
+            time: '11:30 AM',
+            status: 'inProgress',
+          ),
+          BookingModel(
+            id: 'book3',
+            petOwnerId: 'owner1',
+            petOwnerName: 'Alice Smith',
+            doctorId: 'doc2',
+            doctorName: 'Dr. Alex Mercer',
+            date: '2026-06-01',
+            time: '03:00 PM',
+            status: 'completed',
+          ),
         ];
         for (var booking in bookings) {
           await BookingPluginState.repo.create(booking);
         }
       }
 
-      CustomSnackBar.show(context, 'Mock clinical data seeded successfully!', category: SnackBarCategory.success);
+      CustomSnackBar.show(
+        context,
+        'Mock clinical data seeded successfully!',
+        category: SnackBarCategory.success,
+      );
     } catch (e) {
-      CustomSnackBar.show(context, 'Failed to seed mock data: $e', category: SnackBarCategory.error);
+      CustomSnackBar.show(
+        context,
+        'Failed to seed mock data: $e',
+        category: SnackBarCategory.failure,
+      );
     } finally {
       await _initDataAndStreams();
     }
@@ -203,7 +296,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
     String? selectedDoctorId = doctors.first.id;
     String? selectedClientId = clients.first.id;
-    final dateController = TextEditingController(text: DateTime.now().toString().split(' ').first);
+    final dateController = TextEditingController(
+      text: DateTime.now().toString().split(' ').first,
+    );
     final timeController = TextEditingController(text: '10:00 AM');
 
     showDialog(
@@ -213,19 +308,35 @@ class _DashboardPageState extends State<DashboardPage> {
           builder: (context, setDialogState) {
             return AlertDialog(
               backgroundColor: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
               title: Row(
                 children: [
-                  Icon(FontAwesomeIcons.calendarPlus, color: Theme.of(context).colorScheme.primary, size: 22),
+                  Icon(
+                    FontAwesomeIcons.calendarPlus,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 22,
+                  ),
                   const SizedBox(width: 12),
-                  Text('Quick Appointment Booking', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+                  Text(
+                    'Quick Appointment Booking',
+                    style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Select Doctor', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Colors.grey)),
+                  const Text(
+                    'Select Doctor',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      color: Colors.grey,
+                    ),
+                  ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
                     value: selectedDoctorId,
@@ -236,15 +347,30 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: Text(doc.name ?? 'Unknown Doctor'),
                       );
                     }).toList(),
-                    onChanged: (val) => setDialogState(() => selectedDoctorId = val),
+                    onChanged: (val) =>
+                        setDialogState(() => selectedDoctorId = val),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(FontAwesomeIcons.userDoctor, size: 16),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                      prefixIcon: const Icon(
+                        FontAwesomeIcons.userDoctor,
+                        size: 16,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Select Client', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Colors.grey)),
+                  const Text(
+                    'Select Client',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      color: Colors.grey,
+                    ),
+                  ),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
                     value: selectedClientId,
@@ -255,11 +381,19 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: Text(client.name ?? 'Unknown Client'),
                       );
                     }).toList(),
-                    onChanged: (val) => setDialogState(() => selectedClientId = val),
+                    onChanged: (val) =>
+                        setDialogState(() => selectedClientId = val),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(FontAwesomeIcons.solidUser, size: 16),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                      prefixIcon: const Icon(
+                        FontAwesomeIcons.solidUser,
+                        size: 16,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -269,14 +403,28 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Date', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Colors.grey)),
+                            const Text(
+                              'Date',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                            ),
                             const SizedBox(height: 6),
                             TextField(
                               controller: dateController,
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.calendar_today, size: 16),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                                prefixIcon: const Icon(
+                                  Icons.calendar_today,
+                                  size: 16,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
                               ),
                             ),
                           ],
@@ -287,14 +435,28 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Time', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Colors.grey)),
+                            const Text(
+                              'Time',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                            ),
                             const SizedBox(height: 6),
                             TextField(
                               controller: timeController,
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.access_time, size: 16),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                                prefixIcon: const Icon(
+                                  Icons.access_time,
+                                  size: 16,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
                               ),
                             ),
                           ],
@@ -307,12 +469,19 @@ class _DashboardPageState extends State<DashboardPage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
-                  child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    final selectedDoctor = doctors.firstWhere((d) => d.id == selectedDoctorId);
-                    final selectedClient = clients.firstWhere((c) => c.id == selectedClientId);
+                    final selectedDoctor = doctors.firstWhere(
+                      (d) => d.id == selectedDoctorId,
+                    );
+                    final selectedClient = clients.firstWhere(
+                      (c) => c.id == selectedClientId,
+                    );
 
                     final newBooking = BookingModel(
                       id: 'book_${DateTime.now().millisecondsSinceEpoch}',
@@ -328,14 +497,23 @@ class _DashboardPageState extends State<DashboardPage> {
                     await BookingPluginState.repo.create(newBooking);
                     if (context.mounted) {
                       Navigator.pop(ctx);
-                      CustomSnackBar.show(context, 'Appointment booked successfully!', category: SnackBarCategory.success);
+                      CustomSnackBar.show(
+                        context,
+                        'Appointment booked successfully!',
+                        category: SnackBarCategory.success,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  child: const Text('Book Now', style: TextStyle(color: Colors.white)),
+                  child: const Text(
+                    'Book Now',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             );
@@ -348,17 +526,19 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     // Extracted live stats for real-time reactivity
-    final activeDoctors = DoctorsPluginState.repo.items.where((doc) => doc.active == 'true').toList();
+    final activeDoctors = DoctorsPluginState.repo.items
+        .where((doc) => doc.active == 'true')
+        .toList();
     final registeredClients = PetOwnerPluginState.repo.items;
-    final pendingBookings = BookingPluginState.repo.items.where((b) => b.status == 'scheduled' || b.status == 'inProgress').toList();
+    final pendingBookings = BookingPluginState.repo.items
+        .where((b) => b.status == 'scheduled' || b.status == 'inProgress')
+        .toList();
     final totalPets = PetPluginState.repo.items;
 
     // Specialty or Species calculations
@@ -369,7 +549,9 @@ class _DashboardPageState extends State<DashboardPage> {
     }
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F0F12) : const Color(0xFFF9FAFC),
+      backgroundColor: isDark
+          ? const Color(0xFF0F0F12)
+          : const Color(0xFFF9FAFC),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(28.0),
         child: Column(
@@ -385,72 +567,116 @@ class _DashboardPageState extends State<DashboardPage> {
                     Text(
                       'Clinical Analytics Dashboard',
                       style: GoogleFonts.outfit(
-                        textStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: isDark ? Colors.white : const Color(0xFF1E293B),
-                        ),
+                        textStyle: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF1E293B),
+                            ),
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       'Real-time aggregation across medical modules and appointment schedules.',
                       style: GoogleFonts.outfit(
-                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: isDark ? Colors.grey[400] : const Color(0xFF64748B),
-                          fontWeight: FontWeight.w400,
-                        ),
+                        textStyle: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : const Color(0xFF64748B),
+                              fontWeight: FontWeight.w400,
+                            ),
                       ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    if (DoctorsPluginState.repo.items.isEmpty && registeredClients.isEmpty)
+                    if (DoctorsPluginState.repo.items.isEmpty &&
+                        registeredClients.isEmpty)
                       ElevatedButton.icon(
                         onPressed: _seedMockData,
-                        icon: const Icon(FontAwesomeIcons.database, size: 14, color: Colors.white),
-                        label: const Text('Seed Database', style: TextStyle(color: Colors.white)),
+                        icon: const Icon(
+                          FontAwesomeIcons.database,
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          'Seed Database',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.purple,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     const SizedBox(width: 12),
                     ElevatedButton.icon(
                       onPressed: _showQuickBookDialog,
-                      icon: const Icon(FontAwesomeIcons.calendarPlus, size: 14, color: Colors.white),
-                      label: const Text('Quick Book', style: TextStyle(color: Colors.white)),
+                      icon: const Icon(
+                        FontAwesomeIcons.calendarPlus,
+                        size: 14,
+                        color: Colors.white,
+                      ),
+                      label: const Text(
+                        'Quick Book',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // KPI Grid
             LayoutBuilder(
               builder: (context, constraints) {
                 final bool useGrid = constraints.maxWidth > 900;
-                
+
                 if (useGrid) {
                   return Row(
                     children: [
                       Expanded(
                         child: KpiCardWidget(
                           title: 'Active Doctors',
-                          value: '${activeDoctors.length} / ${DoctorsPluginState.repo.items.length}',
+                          value:
+                              '${activeDoctors.length} / ${DoctorsPluginState.repo.items.length}',
                           icon: FontAwesomeIcons.userDoctor,
                           color: Colors.green,
-                          trendPercent: activeDoctors.isEmpty ? 0 : (activeDoctors.length / DoctorsPluginState.repo.items.length) * 100,
+                          trendPercent: activeDoctors.isEmpty
+                              ? 0
+                              : (activeDoctors.length /
+                                        DoctorsPluginState.repo.items.length) *
+                                    100,
                           trendSuffix: 'online',
-                          sparklineData: const [4.0, 5.0, 5.0, 6.0, 6.0, 7.0, 8.0],
+                          sparklineData: const [
+                            4.0,
+                            5.0,
+                            5.0,
+                            6.0,
+                            6.0,
+                            7.0,
+                            8.0,
+                          ],
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -462,7 +688,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.blue,
                           trendPercent: 12.5,
                           trendSuffix: 'growth',
-                          sparklineData: const [10.0, 12.0, 15.0, 18.0, 24.0, 32.0, 40.0],
+                          sparklineData: const [
+                            10.0,
+                            12.0,
+                            15.0,
+                            18.0,
+                            24.0,
+                            32.0,
+                            40.0,
+                          ],
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -474,7 +708,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.amber,
                           trendPercent: pendingBookings.isEmpty ? 0 : -3.5,
                           trendSuffix: 'today',
-                          sparklineData: const [14.0, 12.0, 10.0, 8.0, 9.0, 11.0, 9.0],
+                          sparklineData: const [
+                            14.0,
+                            12.0,
+                            10.0,
+                            8.0,
+                            9.0,
+                            11.0,
+                            9.0,
+                          ],
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -486,7 +728,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.pink,
                           trendPercent: 24.1,
                           trendSuffix: 'growth',
-                          sparklineData: const [8.0, 11.0, 14.0, 19.0, 22.0, 25.0, 30.0],
+                          sparklineData: const [
+                            8.0,
+                            11.0,
+                            14.0,
+                            19.0,
+                            22.0,
+                            25.0,
+                            30.0,
+                          ],
                         ),
                       ),
                     ],
@@ -502,12 +752,25 @@ class _DashboardPageState extends State<DashboardPage> {
                     children: [
                       KpiCardWidget(
                         title: 'Active Doctors',
-                        value: '${activeDoctors.length} / ${DoctorsPluginState.repo.items.length}',
+                        value:
+                            '${activeDoctors.length} / ${DoctorsPluginState.repo.items.length}',
                         icon: FontAwesomeIcons.userDoctor,
                         color: Colors.green,
-                        trendPercent: activeDoctors.isEmpty ? 0 : (activeDoctors.length / DoctorsPluginState.repo.items.length) * 100,
+                        trendPercent: activeDoctors.isEmpty
+                            ? 0
+                            : (activeDoctors.length /
+                                      DoctorsPluginState.repo.items.length) *
+                                  100,
                         trendSuffix: 'online',
-                        sparklineData: const [4.0, 5.0, 5.0, 6.0, 6.0, 7.0, 8.0],
+                        sparklineData: const [
+                          4.0,
+                          5.0,
+                          5.0,
+                          6.0,
+                          6.0,
+                          7.0,
+                          8.0,
+                        ],
                       ),
                       KpiCardWidget(
                         title: 'Registered Clients',
@@ -516,7 +779,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: Colors.blue,
                         trendPercent: 12.5,
                         trendSuffix: 'growth',
-                        sparklineData: const [10.0, 12.0, 15.0, 18.0, 24.0, 32.0, 40.0],
+                        sparklineData: const [
+                          10.0,
+                          12.0,
+                          15.0,
+                          18.0,
+                          24.0,
+                          32.0,
+                          40.0,
+                        ],
                       ),
                       KpiCardWidget(
                         title: 'Pending Bookings',
@@ -525,7 +796,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: Colors.amber,
                         trendPercent: pendingBookings.isEmpty ? 0 : -3.5,
                         trendSuffix: 'today',
-                        sparklineData: const [14.0, 12.0, 10.0, 8.0, 9.0, 11.0, 9.0],
+                        sparklineData: const [
+                          14.0,
+                          12.0,
+                          10.0,
+                          8.0,
+                          9.0,
+                          11.0,
+                          9.0,
+                        ],
                       ),
                       KpiCardWidget(
                         title: 'Total Pets Managed',
@@ -534,21 +813,29 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: Colors.pink,
                         trendPercent: 24.1,
                         trendSuffix: 'growth',
-                        sparklineData: const [8.0, 11.0, 14.0, 19.0, 22.0, 25.0, 30.0],
+                        sparklineData: const [
+                          8.0,
+                          11.0,
+                          14.0,
+                          19.0,
+                          22.0,
+                          25.0,
+                          30.0,
+                        ],
                       ),
                     ],
                   );
                 }
               },
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Second Row: Recent Appointments list and Species distribution
             LayoutBuilder(
               builder: (context, constraints) {
                 final isWide = constraints.maxWidth > 950;
-                
+
                 final recentAppointmentsWidget = Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -591,11 +878,18 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(FontAwesomeIcons.calendar, size: 36, color: Colors.grey[500]),
+                                Icon(
+                                  FontAwesomeIcons.calendar,
+                                  size: 36,
+                                  color: Colors.grey[500],
+                                ),
                                 const SizedBox(height: 12),
                                 Text(
                                   'No schedules found.',
-                                  style: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w500),
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ],
                             ),
@@ -605,30 +899,50 @@ class _DashboardPageState extends State<DashboardPage> {
                         ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: BookingPluginState.repo.items.length.clamp(0, 5),
-                          separatorBuilder: (_, __) => Divider(color: isDark ? Colors.grey[850] : Colors.grey[100]),
+                          itemCount: BookingPluginState.repo.items.length.clamp(
+                            0,
+                            5,
+                          ),
+                          separatorBuilder: (_, __) => Divider(
+                            color: isDark ? Colors.grey[850] : Colors.grey[100],
+                          ),
                           itemBuilder: (context, index) {
                             // Reverse order for recency
-                            final list = BookingPluginState.repo.items.reversed.toList();
+                            final list = BookingPluginState.repo.items.reversed
+                                .toList();
                             final booking = list[index];
                             return ListTile(
                               contentPadding: EdgeInsets.zero,
                               leading: CircleAvatar(
-                                backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                child: Icon(FontAwesomeIcons.calendarDay, size: 16, color: Theme.of(context).colorScheme.primary),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withOpacity(0.1),
+                                child: Icon(
+                                  FontAwesomeIcons.calendarDay,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                               ),
                               title: Text(
                                 booking.petOwnerName ?? 'Unknown Client',
-                                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
                                 child: Text(
                                   'Slot: ${booking.date} at ${booking.time} | Doctor: ${booking.doctorName}',
-                                  style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
-                              trailing: _buildStatusPill(booking.status ?? 'scheduled'),
+                              trailing: _buildStatusPill(
+                                booking.status ?? 'scheduled',
+                              ),
                             );
                           },
                         ),
@@ -665,32 +979,46 @@ class _DashboardPageState extends State<DashboardPage> {
                             const SizedBox(
                               height: 100,
                               child: Center(
-                                child: Text('No patient data to analyze.', style: TextStyle(color: Colors.grey)),
+                                child: Text(
+                                  'No patient data to analyze.',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
                             )
                           else
                             Column(
                               children: petSpeciesCounts.entries.map((entry) {
-                                final percent = (entry.value / totalPets.length) * 100;
+                                final percent =
+                                    (entry.value / totalPets.length) * 100;
                                 Color barColor = Colors.blue;
-                                if (entry.key.toLowerCase() == 'cat') barColor = Colors.orange;
-                                if (entry.key.toLowerCase() == 'bird') barColor = Colors.teal;
+                                if (entry.key.toLowerCase() == 'cat')
+                                  barColor = Colors.orange;
+                                if (entry.key.toLowerCase() == 'bird')
+                                  barColor = Colors.teal;
 
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 16.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             entry.key,
-                                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 13,
+                                            ),
                                           ),
                                           Text(
                                             '${entry.value} (${percent.toStringAsFixed(1)}%)',
-                                            style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                                            style: TextStyle(
+                                              color: Colors.grey[500],
+                                              fontSize: 12,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -699,7 +1027,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: LinearProgressIndicator(
                                           value: entry.value / totalPets.length,
-                                          backgroundColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                                          backgroundColor: isDark
+                                              ? Colors.grey[800]
+                                              : Colors.grey[100],
                                           color: barColor,
                                           minHeight: 8,
                                         ),
@@ -719,8 +1049,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: isDark 
-                              ? [Colors.deepPurple[900]!, Colors.purple[800]!] 
+                          colors: isDark
+                              ? [Colors.deepPurple[900]!, Colors.purple[800]!]
                               : [Colors.purple[500]!, Colors.deepPurple[600]!],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -730,7 +1060,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(FontAwesomeIcons.rocket, color: Colors.white, size: 24),
+                          const Icon(
+                            FontAwesomeIcons.rocket,
+                            color: Colors.white,
+                            size: 24,
+                          ),
                           const SizedBox(height: 16),
                           Text(
                             'Expand Your Clinic!',
@@ -743,15 +1077,24 @@ class _DashboardPageState extends State<DashboardPage> {
                           const SizedBox(height: 8),
                           const Text(
                             'Instantly configure new views, tables, and roles in seconds.',
-                            style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                              height: 1.4,
+                            ),
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () => context.go('/doctors'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
                             ),
                             child: Text(
                               'Go to Doctor Module',
@@ -832,7 +1175,11 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       child: Text(
         label,
-        style: TextStyle(color: text, fontWeight: FontWeight.w600, fontSize: 11),
+        style: TextStyle(
+          color: text,
+          fontWeight: FontWeight.w600,
+          fontSize: 11,
+        ),
       ),
     );
   }

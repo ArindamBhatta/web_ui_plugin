@@ -59,7 +59,8 @@ class CustomTabularView<T extends DataModel> extends StatefulWidget {
   State<CustomTabularView<T>> createState() => _CustomTabularViewState<T>();
 }
 
-class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularView<T>> {
+class _CustomTabularViewState<T extends DataModel>
+    extends State<CustomTabularView<T>> {
   int? _sortColumnIndex = 0;
   bool _sortAscending = true;
 
@@ -72,10 +73,7 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
   @override
   void initState() {
     super.initState();
-    cubit = SectionCubit<T>(
-      repo: widget.repo,
-      formCubit: widget.formCubit,
-    );
+    cubit = SectionCubit<T>(repo: widget.repo, formCubit: widget.formCubit);
     cubit?.loadAll();
 
     if (widget.additionalStreams != null) {
@@ -112,30 +110,30 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
           child: Builder(
             builder: (dialogContentCtx) {
               final detail = widget.detailBuilder(data, dialogContentCtx);
-              final dialogChild =
-                  detail is FormPageView
-                      ? FormPageView(
-                        key: detail.key,
-                        formCubit: detail.formCubit,
-                        dataModel: detail.dataModel,
-                        fields: detail.fields,
-                        rebuildDataModel: detail.rebuildDataModel,
-                        actionButtons: detail.actionButtons,
-                        primaryButtonText: detail.primaryButtonText,
-                        cancelButtonText: detail.cancelButtonText,
-                        onSaveSuccess: () {
-                          detail.onSaveSuccess?.call();
+              final dialogChild = detail is FormPageView
+                  ? FormPageView(
+                      key: detail.key,
+                      formCubit: detail.formCubit,
+                      dataModel: detail.dataModel,
+                      fields: detail.fields,
+                      rebuildDataModel: detail.rebuildDataModel,
+                      actionButtons: detail.actionButtons,
+                      primaryButtonText: detail.primaryButtonText,
+                      cancelButtonText: detail.cancelButtonText,
+                      snackBarEntityName: detail.snackBarEntityName,
+                      onSaveSuccess: () {
+                        detail.onSaveSuccess?.call();
+                        Navigator.of(ctx).pop();
+                      },
+                      onCancel: () {
+                        if (detail.onCancel != null) {
+                          detail.onCancel!.call();
+                        } else {
                           Navigator.of(ctx).pop();
-                        },
-                        onCancel: () {
-                          if (detail.onCancel != null) {
-                            detail.onCancel!.call();
-                          } else {
-                            Navigator.of(ctx).pop();
-                          }
-                        },
-                      )
-                      : detail;
+                        }
+                      },
+                    )
+                  : detail;
 
               return CustomDialogBox(
                 title: dialogTitle,
@@ -208,7 +206,7 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
                       },
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -303,9 +301,13 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
           : Theme.of(context).colorScheme.primary.withValues(alpha: 0.015);
 
       return DataRow(
-        color: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+        color: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
           if (states.contains(WidgetState.hovered)) {
-            return Theme.of(context).colorScheme.primary.withValues(alpha: 0.05);
+            return Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.05);
           }
           return baseColor;
         }),
@@ -335,11 +337,14 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
             );
           }
 
-          final List<T> filteredItems = widget.filterFunction(state.filteredItems);
+          final List<T> filteredItems = widget.filterFunction(
+            state.filteredItems,
+          );
 
           // Apply client-side sorting
           final sortedItems = List<T>.from(filteredItems);
-          if (_sortColumnIndex != null && _sortColumnIndex! < widget.columns.length) {
+          if (_sortColumnIndex != null &&
+              _sortColumnIndex! < widget.columns.length) {
             final col = widget.columns[_sortColumnIndex!];
             sortedItems.sort((left, right) {
               final leftMapper = col.sortValueMapper ?? col.valueMapper;
@@ -368,7 +373,10 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
                               color: Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.5),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant
+                                    .withValues(alpha: 0.5),
                                 width: 1,
                               ),
                               boxShadow: [
@@ -396,24 +404,35 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
                                     child: Theme(
                                       data: Theme.of(context).copyWith(
                                         dividerTheme: DividerThemeData(
-                                          color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.4),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant
+                                              .withValues(alpha: 0.4),
                                         ),
                                       ),
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          minWidth: constraints.maxWidth - 2, // Account for border width
+                                          minWidth:
+                                              constraints.maxWidth -
+                                              2, // Account for border width
                                         ),
                                         child: DataTable(
                                           columnSpacing: 32,
                                           horizontalMargin: 24,
-                                          headingRowColor: WidgetStateProperty.resolveWith<Color?>((
-                                            Set<WidgetState> states,
-                                          ) {
-                                            return Theme.of(context).colorScheme.primary.withValues(alpha: 0.05);
-                                          }),
+                                          headingRowColor:
+                                              WidgetStateProperty.resolveWith<
+                                                Color?
+                                              >((Set<WidgetState> states) {
+                                                return Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                    .withValues(alpha: 0.05);
+                                              }),
                                           headingTextStyle: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).colorScheme.primary,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
                                             fontSize: 14,
                                           ),
                                           sortColumnIndex: _sortColumnIndex,
@@ -458,8 +477,12 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
                             buttonType: ButtonType.secondary,
                             height: AppTheme.formButtonHeight - 6,
                             icon: Icons.add,
-                            backgroundColor: Theme.of(context).colorScheme.primary,
-                            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             elevation: 0,
                             onPressed: () {

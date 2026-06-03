@@ -86,6 +86,7 @@ class TechnicianPluginPage extends StatelessWidget {
         formCubit: BlocProvider.of<FormCubit<TechnicianModel>>(ctx),
         dataModel: item,
         supportsCrud: technicianPlugin.features.supportsCrud,
+        snackBarEntityName: 'Technician',
         fields: [
           WidgetConfig(
             key: 'name',

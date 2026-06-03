@@ -90,6 +90,7 @@ class DoctorsSectionPage extends StatelessWidget {
         formCubit: BlocProvider.of<FormCubit<DoctorModel>>(ctx),
         dataModel: item,
         supportsCrud: doctorsPlugin.features.supportsCrud,
+        snackBarEntityName: 'Doctor',
         fields: [
           WidgetConfig(
             key: 'name',
