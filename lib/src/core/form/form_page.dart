@@ -212,15 +212,21 @@ class _FormPageViewState extends State<FormPageView> {
     final previousUid = oldWidget.dataModel.uid;
     final currentUid = widget.dataModel.uid;
     final didDataModelChange = previousUid != currentUid;
-    final didFieldsChange = oldWidget.fields != widget.fields;
 
-    if (didDataModelChange || didFieldsChange) {
+    if (didDataModelChange) {
       if (_isDataMismatch && mounted) {
         _showUnsavedChangesLostSnackBar();
       }
       _initializeFormData();
       if (mounted) {
         setState(() {});
+      }
+    } else {
+      if (!_isDataMismatch) {
+        _initializeFormData();
+        if (mounted) {
+          setState(() {});
+        }
       }
     }
   }

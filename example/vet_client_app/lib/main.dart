@@ -13,9 +13,9 @@ void main() async {
     apiKey: 'AIzaSyD0J_5aqolfSn9uDnkcVfVvyrQjZc2gaBg',
     appId: '1:593360566365:web:ed338bacd98cdb509075b4',
     messagingSenderId: '593360566365',
-    projectId: 'chat-app-44a75',
-    authDomain: 'chat-app-44a75.firebaseapp.com',
-    storageBucket: 'chat-app-44a75.firebasestorage.app',
+    projectId: 'baisakhi-enterprise-vet-clinic',
+    authDomain: 'baisakhi-enterprise-vet-clinic.firebaseapp.com',
+    storageBucket: 'baisakhi-enterprise-vet-clinic.firebasestorage.app',
     measurementId: 'G-RK7YFJGJJC',
   );
 

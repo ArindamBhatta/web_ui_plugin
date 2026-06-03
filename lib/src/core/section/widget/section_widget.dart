@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 // Cubit for Section UI state
@@ -76,23 +77,42 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
   void initState() {
     super.initState();
     _layoutMode = widget.defaultLayoutMode;
+    if (widget.initialSelectedItemId != null) {
+      _mobileViewingDetail = true;
+    }
     cubit = SectionCubit<T>(
       repo: widget.repo,
       formCubit: widget.formCubit,
       statusKeyOf: widget.statusKeyOf,
       dateOf: widget.dateOf,
       initialSelectedStatuses: widget.initialSelectedStatuses,
+      initialSelectedItemId: widget.initialSelectedItemId,
     );
     cubit.loadAll();
+  }
 
-    if (widget.initialSelectedItemId != null) {
-      final item = widget.repo.items.firstWhere(
-        (e) => e.uid == widget.initialSelectedItemId,
-        orElse: () => widget.createEmptyModel.call(),
-      );
-      if (item.uid.isNotEmpty) {
-        cubit.selectItem(item);
+  @override
+  void didUpdateWidget(covariant SectionWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialSelectedItemId != widget.initialSelectedItemId) {
+      cubit.selectItemById(widget.initialSelectedItemId);
+      if (widget.initialSelectedItemId != null) {
+        setState(() => _mobileViewingDetail = true);
+      } else {
+        setState(() => _mobileViewingDetail = false);
       }
+    }
+  }
+
+  String _getBasePath(BuildContext context) {
+    try {
+      final state = GoRouterState.of(context);
+      final segments = state.uri.pathSegments;
+      if (segments.isEmpty) return '/';
+      return '/${segments.first}';
+    } catch (e, stack) {
+      debugPrint('Error in _getBasePath: $e\n$stack');
+      return '';
     }
   }
 
@@ -266,7 +286,28 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
 
     return BlocProvider.value(
       value: cubit,
-      child: BlocBuilder<SectionCubit<T>, SectionState<T>>(
+      child: BlocConsumer<SectionCubit<T>, SectionState<T>>(
+        listener: (context, state) {
+          final selectedUid = state.selectedItem?.uid;
+          final basePath = _getBasePath(context);
+          if (basePath.isNotEmpty) {
+            if (selectedUid == null && state.addedItemId != null) {
+              return;
+            }
+            final GoRouterState routerState = GoRouterState.of(context);
+            final currentPath = routerState.uri.path;
+            final expectedPath = selectedUid != null ? '$basePath/$selectedUid' : basePath;
+            if (currentPath != expectedPath) {
+              context.go(expectedPath);
+            }
+          }
+          final bool isMobile = MediaQuery.of(context).size.width < 900;
+          if (state.selectedItem == null && _mobileViewingDetail) {
+            setState(() => _mobileViewingDetail = false);
+          } else if (state.selectedItem != null && isMobile && !_mobileViewingDetail) {
+            setState(() => _mobileViewingDetail = true);
+          }
+        },
         builder: (context, state) {
           final bool isWaiting = state.status == SuccessStatus.waiting;
           final bool hasItems = state.items.isNotEmpty;

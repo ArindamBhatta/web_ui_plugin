@@ -48,14 +48,14 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
 
     // App States eg Pending, Completed
     Set<String> initialSelectedStatuses = const <String>{},
-
-    //? The Requirement: A Cubit must have an initial state the moment it is created. It cannot exist in a "null" state. By calling super(...), we are passing the initial state to the underlying Bloc library.
+    String? initialSelectedItemId,
   }) : super(
          SectionState<T>(
            selectedStatuses: initialSelectedStatuses
                .map((e) => e.trim())
                .where((e) => e.isNotEmpty)
                .toSet(),
+           addedItemId: initialSelectedItemId,
          ),
        ) {
     _listenToRepo();
@@ -70,18 +70,18 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
       final items = data.$1;
       final addedItemId = data.$2;
 
-      // If an item was just added, try to select it by addedItemId
+      // If an item was just added or we have an initial/pending selection, try to select it by ID
       T? selected;
-      String? newAddedItemId = addedItemId ?? state.addedItemId;
-
-      try {
-        selected = items.cast<T?>().firstWhere(
-          (item) => item?.uid == newAddedItemId,
-          orElse: () => null,
-        );
-        selectedItem = selected;
-      } catch (_) {
-        selected = null;
+      final String? targetId = addedItemId ?? state.addedItemId;
+      if (targetId != null) {
+        try {
+          selected = items.cast<T?>().firstWhere(
+            (item) => item?.uid == targetId,
+            orElse: () => null,
+          );
+        } catch (_) {
+          selected = null;
+        }
       }
 
       final filtered = _applyFilters(
@@ -91,13 +91,13 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
         fromDate: state.fromDate,
         toDate: state.toDate,
       );
-      final nextSelected = _resolveSelected(selected ?? selectedItem, filtered);
+      final nextSelected = _resolveSelected(selected ?? state.selectedItem, filtered);
 
       final newState = state.copyWith(
         items: items,
         filteredItems: filtered,
         selectedItem: nextSelected,
-        addedItemId: addedItemId, // update addedItemId in state
+        addedItemId: nextSelected != null ? null : (addedItemId ?? state.addedItemId),
       );
       selectedItem = nextSelected;
 
@@ -183,7 +183,13 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
         fromDate: state.fromDate,
         toDate: state.toDate,
       );
-      final selected = _resolveSelected(selectedItem, filtered);
+      final candidateSelected = selectedItem ?? (state.addedItemId != null
+          ? items.cast<T?>().firstWhere(
+              (item) => item?.uid == state.addedItemId,
+              orElse: () => null,
+            )
+          : null);
+      final selected = _resolveSelected(candidateSelected, filtered);
       selectedItem = selected;
       emit(
         state.copyWith(
@@ -196,6 +202,29 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
       );
     } catch (_) {
       emit(state.copyWith(status: SuccessStatus.error));
+    }
+  }
+
+  void selectItemById(String? id) {
+    if (id == null) {
+      selectItem(null);
+      return;
+    }
+    T? item;
+    try {
+      item = state.items.firstWhere((e) => e.uid == id);
+    } catch (_) {
+      try {
+        item = repo.items.firstWhere((e) => e.uid == id);
+      } catch (_) {
+        item = null;
+      }
+    }
+
+    if (item != null) {
+      selectItem(item);
+    } else {
+      emit(state.copyWith(addedItemId: id));
     }
   }
 
@@ -329,7 +358,7 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
         }
         emit(state.copyWith(status: SuccessStatus.success));
       } else if (formState is FormFailure) {
-        emit(state.copyWith(status: SuccessStatus.error));
+        emit(state.copyWith(status: SuccessStatus.success));
       } else if (formState is FormLoaded<T>) {
         emit(state.copyWith(status: SuccessStatus.success));
       } else if (formState is FromInitial) {

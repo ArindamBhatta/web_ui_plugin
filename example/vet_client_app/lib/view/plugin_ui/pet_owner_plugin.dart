@@ -45,6 +45,12 @@ petOwnerPlugin = DefaultPluginDescription<PetOwnerModel>(
         initialSelectedItemId: state.uri.queryParameters['selected'],
       ),
     ),
+    SingleRouteDescriptionAndPolicy(
+      path: '/pet-owners/:id', //GoRouter path with path parameter
+      builder: (BuildContext ctx, GoRouterState state) => PetOwnerPluginPage(
+        initialSelectedItemId: state.pathParameters['id'],
+      ),
+    ),
   ],
 );
 

@@ -120,16 +120,22 @@ class FirestoreService<T extends DataModel> with FormServiceMixin<T> {
       if (id == null || id.isEmpty) {
         throw Exception("Item must store a Id");
       }
-      final query = await _firestore
-          .collection(_collectionName)
-          .where('id', isEqualTo: id)
-          .limit(1)
-          .get();
-      if (query.docs.isEmpty) throw Exception('No item found with id $id');
-      await _firestore
-          .collection(_collectionName)
-          .doc(query.docs.first.id)
-          .update(updateItem.toJson());
+      final docRef = _firestore.collection(_collectionName).doc(id);
+      final docSnap = await docRef.get();
+      if (docSnap.exists) {
+        await docRef.update(updateItem.toJson());
+      } else {
+        final query = await _firestore
+            .collection(_collectionName)
+            .where('id', isEqualTo: id)
+            .limit(1)
+            .get();
+        if (query.docs.isEmpty) throw Exception('No item found with id $id');
+        await _firestore
+            .collection(_collectionName)
+            .doc(query.docs.first.id)
+            .update(updateItem.toJson());
+      }
       return updateItem;
     } catch (error) {
       throw Exception('Failed to update item: $error');
@@ -143,16 +149,22 @@ class FirestoreService<T extends DataModel> with FormServiceMixin<T> {
       if (id == null || id.isEmpty) {
         throw Exception("Item id can't be null for Delete");
       }
-      final query = await _firestore
-          .collection(_collectionName)
-          .where('id', isEqualTo: id)
-          .limit(1)
-          .get();
-      if (query.docs.isEmpty) throw Exception('No item found with id $id');
-      await _firestore
-          .collection(_collectionName)
-          .doc(query.docs.first.id)
-          .delete();
+      final docRef = _firestore.collection(_collectionName).doc(id);
+      final docSnap = await docRef.get();
+      if (docSnap.exists) {
+        await docRef.delete();
+      } else {
+        final query = await _firestore
+            .collection(_collectionName)
+            .where('id', isEqualTo: id)
+            .limit(1)
+            .get();
+        if (query.docs.isEmpty) throw Exception('No item found with id $id');
+        await _firestore
+            .collection(_collectionName)
+            .doc(query.docs.first.id)
+            .delete();
+      }
       return item;
     } catch (error) {
       throw Exception('Failed to delete item: $error');

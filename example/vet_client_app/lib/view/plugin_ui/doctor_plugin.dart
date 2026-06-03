@@ -41,6 +41,12 @@ doctorsPlugin = DefaultPluginDescription<DoctorModel>(
         initialSelectedItemId: state.uri.queryParameters['selected'],
       ),
     ),
+    SingleRouteDescriptionAndPolicy(
+      path: '/doctors/:id', // Navigates with path parameter
+      builder: (BuildContext ctx, GoRouterState state) => DoctorsSectionPage(
+        initialSelectedItemId: state.pathParameters['id'],
+      ),
+    ),
   ],
 );
 

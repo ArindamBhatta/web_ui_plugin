@@ -49,7 +49,7 @@ class SectionState<T extends DataModel> extends Equatable {
     Set<String>? selectedStatuses,
     Object? fromDate = _unset,
     Object? toDate = _unset,
-    String? addedItemId,
+    Object? addedItemId = _unset,
     DateTime? lastUpdated,
   }) {
     return SectionState<T>(
@@ -65,7 +65,9 @@ class SectionState<T extends DataModel> extends Equatable {
           ? this.fromDate
           : fromDate as DateTime?,
       toDate: identical(toDate, _unset) ? this.toDate : toDate as DateTime?,
-      addedItemId: addedItemId,
+      addedItemId: identical(addedItemId, _unset)
+          ? this.addedItemId
+          : addedItemId as String?,
       lastUpdated: lastUpdated ?? DateTime.now(),
     );
   }

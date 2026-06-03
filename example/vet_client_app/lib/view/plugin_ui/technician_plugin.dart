@@ -30,6 +30,14 @@ technicianPlugin = DefaultPluginDescription<TechnicianModel>(
       accessPolicy:
           OpenDefaultDevelopmentPolicy(), //Todo: change this to real policy after login and persona implementation
     ),
+    SingleRouteDescriptionAndPolicy(
+      path: '/technicians/:id',
+      builder: (BuildContext ctx, GoRouterState state) => TechnicianPluginPage(
+        initialSelectedItemId: state.pathParameters['id'],
+      ),
+      accessPolicy:
+          OpenDefaultDevelopmentPolicy(),
+    ),
   ],
 
   // if login is not implemented default to admin
