@@ -50,6 +50,18 @@ mixin FormRepoMixin<T extends DataModel> {
   Future<String> create(T item) async {
     final newItemId = await service.create(item);
     newlyAddedItemId = newItemId;
+
+    if (!service.supportsRealtime) {
+      final fetched = await readAll(forceFetch: true);
+      String? addedItemId = fetched.any((e) => e.uid == newlyAddedItemId)
+          ? newlyAddedItemId
+          : null;
+      if (addedItemId != null) {
+        newlyAddedItemId = null;
+      }
+      emitData(fetched, addedItemId: addedItemId);
+    }
+
     return newItemId;
   }
 

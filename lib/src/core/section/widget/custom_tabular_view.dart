@@ -72,7 +72,10 @@ class _CustomTabularViewState<T extends DataModel> extends State<CustomTabularVi
   @override
   void initState() {
     super.initState();
-    cubit = SectionCubit<T>(repo: widget.repo);
+    cubit = SectionCubit<T>(
+      repo: widget.repo,
+      formCubit: widget.formCubit,
+    );
     cubit?.loadAll();
 
     if (widget.additionalStreams != null) {

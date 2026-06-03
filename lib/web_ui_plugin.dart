@@ -71,6 +71,3 @@ export 'src/core/functions/date_time_utils.dart';
 // ── Firebase adapter (default) ────────────────────────────────────────────────
 export 'src/adapters/firebase/firestore_service.dart';
 export 'src/adapters/firebase/section_repo.dart';
-
-// ── Compatibility layer (incremental migration from old SectionRepo/SectionService)
-export 'src/compat/compat.dart';

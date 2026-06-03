@@ -22,9 +22,10 @@ class SectionWidget<T extends DataModel> extends StatefulWidget {
   final List<CustomButton> Function(BuildContext context, T item)?
   footerActionButtons;
 
-  final List<String> Function(T item)? filterExtraTabs;
+  final List<String> Function(T item)?
+  filterExtraTabs; //use filterExtraTabs: (TT) => ["XYZ"]
   final List<Widget Function(String itemId)> Function(T item)?
-  extraTabViewsBuilder;
+  extraTabViewsBuilder; //use extraTabViewsBuilder: (TT) => [(itemId) => PlaceHolder()]
 
   final T Function() createEmptyModel;
   final DataModel Function(Map<String, dynamic> data) rebuildDataModel;
@@ -77,6 +78,7 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
     _layoutMode = widget.defaultLayoutMode;
     cubit = SectionCubit<T>(
       repo: widget.repo,
+      formCubit: widget.formCubit,
       statusKeyOf: widget.statusKeyOf,
       dateOf: widget.dateOf,
       initialSelectedStatuses: widget.initialSelectedStatuses,
@@ -342,10 +344,14 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
                         width: AppTheme.formFieldHeight - 8,
                         height: AppTheme.formFieldHeight - 8,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.2),
                             width: 1,
                           ),
                         ),
@@ -366,59 +372,59 @@ class _SectionState<T extends DataModel> extends State<SectionWidget<T>> {
               Expanded(
                 child: state.filteredItems.isNotEmpty
                     ? (_layoutMode == SectionLayoutMode.list
-                        ? CustomListView(
-                            data: state.filteredItems,
-                            selectedItem: state.selectedItem,
-                            onItemTap: (item) {
-                              final tappedItem = item as T;
-                              final selectedUid = state.selectedItem?.uid;
+                          ? CustomListView(
+                              data: state.filteredItems,
+                              selectedItem: state.selectedItem,
+                              onItemTap: (item) {
+                                final tappedItem = item as T;
+                                final selectedUid = state.selectedItem?.uid;
 
-                              if (selectedUid != tappedItem.uid) {
-                                if (SectionCubit.hasUnsavedFormChanges) {
-                                  CustomSnackBar.show(
-                                    context,
-                                    'You have unsaved changes. Changes were discarded when switching item.',
-                                    category: SnackBarCategory.warning,
-                                  );
-                                  SectionCubit.hasUnsavedFormChanges = false;
+                                if (selectedUid != tappedItem.uid) {
+                                  if (SectionCubit.hasUnsavedFormChanges) {
+                                    CustomSnackBar.show(
+                                      context,
+                                      'You have unsaved changes. Changes were discarded when switching item.',
+                                      category: SnackBarCategory.warning,
+                                    );
+                                    SectionCubit.hasUnsavedFormChanges = false;
+                                  }
+                                  cubit.selectItem(tappedItem);
                                 }
-                                cubit.selectItem(tappedItem);
-                              }
 
-                              if (isMobile) {
-                                setState(() => _mobileViewingDetail = true);
-                              }
-                            },
-                          )
-                        : PluginGridView(
-                            data: state.filteredItems,
-                            selectedItem: state.selectedItem,
-                            sectionColor: widget.sectionColor,
-                            sectionIcon: widget.sectionIcon,
-                            statusKeyOf: widget.statusKeyOf != null
-                                ? (item) => widget.statusKeyOf!(item as T)
-                                : null,
-                            onItemTap: (item) {
-                              final tappedItem = item as T;
-                              final selectedUid = state.selectedItem?.uid;
-
-                              if (selectedUid != tappedItem.uid) {
-                                if (SectionCubit.hasUnsavedFormChanges) {
-                                  CustomSnackBar.show(
-                                    context,
-                                    'You have unsaved changes. Changes were discarded when switching item.',
-                                    category: SnackBarCategory.warning,
-                                  );
-                                  SectionCubit.hasUnsavedFormChanges = false;
+                                if (isMobile) {
+                                  setState(() => _mobileViewingDetail = true);
                                 }
-                                cubit.selectItem(tappedItem);
-                              }
+                              },
+                            )
+                          : PluginGridView(
+                              data: state.filteredItems,
+                              selectedItem: state.selectedItem,
+                              sectionColor: widget.sectionColor,
+                              sectionIcon: widget.sectionIcon,
+                              statusKeyOf: widget.statusKeyOf != null
+                                  ? (item) => widget.statusKeyOf!(item as T)
+                                  : null,
+                              onItemTap: (item) {
+                                final tappedItem = item as T;
+                                final selectedUid = state.selectedItem?.uid;
 
-                              if (isMobile) {
-                                setState(() => _mobileViewingDetail = true);
-                              }
-                            },
-                          ))
+                                if (selectedUid != tappedItem.uid) {
+                                  if (SectionCubit.hasUnsavedFormChanges) {
+                                    CustomSnackBar.show(
+                                      context,
+                                      'You have unsaved changes. Changes were discarded when switching item.',
+                                      category: SnackBarCategory.warning,
+                                    );
+                                    SectionCubit.hasUnsavedFormChanges = false;
+                                  }
+                                  cubit.selectItem(tappedItem);
+                                }
+
+                                if (isMobile) {
+                                  setState(() => _mobileViewingDetail = true);
+                                }
+                              },
+                            ))
                     : NoDataView(
                         title: 'No ${widget.sectionTitle} Found',
                         subtitle:

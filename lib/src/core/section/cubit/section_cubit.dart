@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web_ui_plugin/src/core/form/cubit/form_cubit.dart';
 import 'package:web_ui_plugin/src/core/form/repo/form_repo_mixin.dart';
 import 'package:web_ui_plugin/src/core/widgets/package_enums.dart';
 
@@ -13,8 +14,12 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
   // Tracks whether the currently active form has unsaved edits.
   static bool hasUnsavedFormChanges = false;
 
-  //1st take repo instance
+  // Reactive Flow: The repo manages the data connection to Firebase.
+  // It provides a 'dataStream' that this Cubit listens to for real-time updates.
   final FormRepoMixin<T> repo;
+
+  // Optional FormCubit link to coordinate UI loading/waiting states and deletion side-effects.
+  final FormCubit<T>? formCubit;
 
   //3rd take optional functions to extract status and date from items for filtering
   final String? Function(T item)? statusKeyOf;
@@ -22,17 +27,22 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
   //4th take optional function to extract date from item for date range filtering
   final DateTime? Function(T item)? dateOf;
 
-  // Internal stream and subscription to listen to repo changes
+  // Reactive Flow: The stream of data Form  the repository (originating from Firebase)
   late Stream<(List<T>, String?)> _repoStream;
 
-  // Keep track of the currently selected item to try to maintain selection across updates
+  // Reactive Flow: The active subscription to the repository's stream.
+  // Kept here so it can be cleanly cancelled when the cubit is closed.
   late StreamSubscription<(List<T>, String?)>? _repoSubscription;
+
+  // Subscription to the linked FormCubit.
+  StreamSubscription<FormViewState>? _formSubscription;
 
   // Expose selectedItem for external access if needed
   T? selectedItem;
 
   SectionCubit({
     required this.repo,
+    this.formCubit,
     this.statusKeyOf,
     this.dateOf,
 
@@ -49,6 +59,7 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
          ),
        ) {
     _listenToRepo();
+    _listenToFormCubit();
   }
 
   // It subscribes to a Stream from the repo . Whenever the database or API updates, the Cubit automatically receives the new list, applies the current filters (search text, dates), and emits a new state
@@ -305,9 +316,32 @@ class SectionCubit<T extends DataModel> extends Cubit<SectionState<T>> {
     );
   }
 
+  void _listenToFormCubit() {
+    if (formCubit == null) return;
+    _formSubscription = formCubit!.stream.listen((formState) {
+      if (formState is FormInProgress) {
+        emit(state.copyWith(status: SuccessStatus.waiting));
+      } else if (formState is FormSuccess<T>) {
+        if (formState.operation == FormOperation.delete) {
+          if (state.selectedItem?.uid == formState.data.uid) {
+            selectItem(null);
+          }
+        }
+        emit(state.copyWith(status: SuccessStatus.success));
+      } else if (formState is FormFailure) {
+        emit(state.copyWith(status: SuccessStatus.error));
+      } else if (formState is FormLoaded<T>) {
+        emit(state.copyWith(status: SuccessStatus.success));
+      } else if (formState is FromInitial) {
+        emit(state.copyWith(status: SuccessStatus.success));
+      }
+    });
+  }
+
   @override
   Future<void> close() {
     _repoSubscription?.cancel();
+    _formSubscription?.cancel();
     return super.close();
   }
 }

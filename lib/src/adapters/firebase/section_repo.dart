@@ -11,6 +11,7 @@ class SectionRepo<T extends DataModel> with FormRepoMixin<T> {
 
   final String moduleId;
 
+  //
   SectionRepo._internal({
     required this.moduleId,
     required FormServiceMixin<T> service,
@@ -28,7 +29,7 @@ class SectionRepo<T extends DataModel> with FormRepoMixin<T> {
     final collectionName =
         (service as dynamic).collectionName as String? ?? T.toString();
 
-    final key = CrossModuleSingletonKey(
+    final CrossModuleSingletonKey key = CrossModuleSingletonKey(
       moduleId: moduleId,
       modelType: T.toString(),
       collection: collectionName,
@@ -41,11 +42,10 @@ class SectionRepo<T extends DataModel> with FormRepoMixin<T> {
         as SectionRepo<T>;
   }
 
-  /// Convenience factory to build a repo directly from a [PluginDescriptor].
-  /// This ensures that feature flags (like supportsRealtime) are respected
-  /// from a single source of truth.
+  /// Convenience factory to build a repo directly from a [PluginDescriptor]. This ensures that feature flags (like supportsRealtime) are respected from a single source of truth.
   factory SectionRepo.fromDescriptor(DefaultPluginDescription<T> descriptor) {
-    final binding = descriptor.dataBinding;
+    final PluginDataBinding<T> binding = descriptor.dataBinding;
+
     return SectionRepo<T>(
       moduleId: descriptor.moduleId,
       supportsRealtime: descriptor.features.supportsRealtime,
