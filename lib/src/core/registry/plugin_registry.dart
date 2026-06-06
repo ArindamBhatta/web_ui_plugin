@@ -8,8 +8,10 @@ class RegisteredPlugin<T extends DataModel> {
   RegisteredPlugin(this.description) : registeredAt = DateTime.now();
 }
 
-/// All plugins register here during bootstrap; the app shell reads from here
-/// to generate sidebar entries, route tables, and permission checks.
+//? PluginRegistry (The Catalog of Security Policies)
+//It is the static registry that knows about every module/plugin registered in your app.
+//It stores the declarative rules (e.g., visibilityPolicy: PersonaPermissionPolicy({'admin', 'operator'})).
+//It does not know who is logged in. It is just a directory of metadata.
 class PluginRegistry {
   PluginRegistry._();
 
@@ -44,20 +46,6 @@ class PluginRegistry {
     // Sort plugins by their specified order in the description, ensuring a consistent display order in the UI.
     sorted.sort((a, b) => a.description.order.compareTo(b.description.order));
     return sorted;
-  }
-
-  /// Plugins visible to [user] after evaluating each plugin's visibility policy.
-  //Todo: visibility policy is not yet utilized by the plugins, but the structure is in place for future implementation.
-  List<RegisteredPlugin> visibleTo(UserIdentity user) {
-    return all.where((plugin) {
-      final policy = plugin.description.visibilityPolicy;
-      if (policy == null) return true;
-      final ctx = PermissionContext(
-        user: user,
-        moduleId: plugin.description.moduleId,
-      );
-      return policy.evaluate(ctx).granted;
-    }).toList();
   }
 
   /// Find a plugin by moduleId. used in [PermissionMiddleware] for permission checks.

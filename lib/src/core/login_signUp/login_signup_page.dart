@@ -6,20 +6,19 @@ import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 /// Callback type for login form submission.
 /// Returns the authenticated [UserIdentity] on success, or throws an error on failure.
-typedef LoginCallback = Future<UserIdentity> Function(
-  String email,
-  String password,
-);
+typedef LoginCallback =
+    Future<UserIdentity> Function(String email, String password);
 
 /// Callback type for signup form submission.
 /// Returns the created [UserIdentity] on success, or throws an error on failure.
-typedef SignUpCallback = Future<UserIdentity> Function(
-  String email,
-  String password,
-  String name,
-  String mobile,
-  String persona,
-);
+typedef SignUpCallback =
+    Future<UserIdentity> Function(
+      String email,
+      String password,
+      String name,
+      String mobile,
+      String persona,
+    );
 
 /// A highly aesthetic, responsive, and plug-and-play Login & Signup screen.
 ///
@@ -28,7 +27,7 @@ typedef SignUpCallback = Future<UserIdentity> Function(
 /// - Modern gradient background and glassmorphism styling.
 /// - Switchable modes (Login / Sign Up) with smooth animated transitions.
 /// - Full validation for email, password, name, and phone.
-/// - Dropdown role selection for signups.
+/// - Dropdown role selection for signup.
 /// - Customizable branding (Logo, Title, Tagline).
 class LoginSignUpPage extends StatefulWidget {
   /// Callback executed when the login button is pressed.
@@ -58,7 +57,8 @@ class LoginSignUpPage extends StatefulWidget {
     required this.onSignUp,
     this.logo,
     this.brandName = 'SaaS Admin',
-    this.brandTagline = 'The ultimate plug-and-play solution for modern applications.',
+    this.brandTagline =
+        'The ultimate plug-and-play solution for modern applications.',
     this.availableRoles = const ['admin', 'operator', 'manager'],
     this.redirectPath = '/',
   });
@@ -164,7 +164,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
     final bool useSplitScreen = size.width > AppTheme.breakpointWide;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F0F12) : const Color(0xFFF3F4F6),
+      backgroundColor: isDark
+          ? const Color(0xFF0F0F12)
+          : const Color(0xFFF3F4F6),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -183,13 +185,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
                 ? Row(
                     children: [
                       // Left Banner Column
-                      Expanded(
-                        child: _buildBannerSection(isDark),
-                      ),
+                      Expanded(child: _buildBannerSection(isDark)),
                       // Right Form Column
-                      Expanded(
-                        child: _buildFormSection(context, isDark),
-                      ),
+                      Expanded(child: _buildFormSection(context, isDark)),
                     ],
                   )
                 : _buildFormSection(context, isDark),
@@ -205,14 +203,8 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
-              ? [
-                  const Color(0xFF1F2937),
-                  const Color(0xFF111827),
-                ]
-              : [
-                  const Color(0xFF4F46E5),
-                  const Color(0xFF3730A3),
-                ],
+              ? [const Color(0xFF1F2937), const Color(0xFF111827)]
+              : [const Color(0xFF4F46E5), const Color(0xFF3730A3)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -222,11 +214,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           widget.logo ??
-              const Icon(
-                FontAwesomeIcons.cubes,
-                color: Colors.white,
-                size: 48,
-              ),
+              const Icon(FontAwesomeIcons.cubes, color: Colors.white, size: 48),
           const SizedBox(height: 32),
           Text(
             widget.brandName,
@@ -285,7 +273,8 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Mobile Branding header
-            if (MediaQuery.of(context).size.width <= AppTheme.breakpointWide) ...[
+            if (MediaQuery.of(context).size.width <=
+                AppTheme.breakpointWide) ...[
               Center(
                 child: Column(
                   children: [
@@ -302,7 +291,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
                         textStyle: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : const Color(0xFF1E293B),
+                          color: isDark
+                              ? Colors.white
+                              : const Color(0xFF1E293B),
                         ),
                       ),
                     ),
@@ -397,10 +388,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
                         ),
                         labelStyle: TextStyle(
                           fontSize: 12,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
                         border: const OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(
@@ -422,15 +412,16 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
                       if (val == null || val.trim().isEmpty) {
                         return 'Please enter your email';
                       }
-                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                          .hasMatch(val.trim())) {
+                      if (!RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      ).hasMatch(val.trim())) {
                         return 'Please enter a valid email address';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
-                   CustomTextField(
+                  CustomTextField(
                     textController: _passwordController,
                     labelText: 'Password',
                     icon: FontAwesomeIcons.lock,
@@ -469,7 +460,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
             CustomButton(
               text: _isSignUpMode ? 'Register Account' : 'Sign In',
               onPressed: _submit,
-              buttonState: _isLoading ? ButtonState.working : ButtonState.enabled,
+              buttonState: _isLoading
+                  ? ButtonState.working
+                  : ButtonState.enabled,
               height: 48,
               borderRadius: 8,
             ),
@@ -493,9 +486,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
                   onPressed: _toggleMode,
                   child: Text(
                     _isSignUpMode ? 'Sign In' : 'Sign Up',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

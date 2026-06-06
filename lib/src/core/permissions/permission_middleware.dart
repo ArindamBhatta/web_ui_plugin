@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
-/// Middleware that enforces permissions at two levels:
-/// 1. Plugin visibility  — is the plugin shown in the sidebar?
-/// 2. Route access       — can the user navigate to the route?
+//?  PermissionMiddleware (The Gatekeeper Evaluating Session State)
+// It keeps track of the active runtime state—specifically the currently logged-in user (_currentUser).
+// It needs to evaluate the rules in the registry against the logged-in user.
 class PermissionMiddleware extends ChangeNotifier {
   PermissionMiddleware._();
   static final PermissionMiddleware instance = PermissionMiddleware._();
@@ -11,7 +11,6 @@ class PermissionMiddleware extends ChangeNotifier {
   UserIdentity? _currentUser;
 
   /// Set (or update) the active user identity.
-  /// Call this after login / on auth state changes.
   void setUser(UserIdentity user) {
     _currentUser = user;
     notifyListeners();
@@ -25,23 +24,25 @@ class PermissionMiddleware extends ChangeNotifier {
 
   UserIdentity? get currentUser => _currentUser;
 
-  /// Returns true if the plugin with [moduleId] should be visible in the sidebar.
+  ///🧐  Checkpoint 1: The Navigation Sidebar (Silent Treatment)
   bool isPluginVisible(String moduleId) {
     final user = _currentUser;
     if (user == null) return false;
-
+    // 1. Fetch the plugin descriptor from the registry catalog
     final plugin = PluginRegistry.instance.findById(moduleId);
     if (plugin == null) return false;
 
+    // 2. Fetch the security policy declared on that plugin
     final policy = plugin.description.visibilityPolicy;
     if (policy == null) return true;
 
+    // 3. Evaluate the policy against the current user identity
     return policy
         .evaluate(PermissionContext(user: user, moduleId: moduleId))
         .granted;
   }
 
-  /// Returns true if the user can access [routePath] within [moduleId].
+  //🧐 Checkpoint 2: The Direct Route Attempt (The Access Gate)
   bool canAccessRoute(String moduleId, String routePath) {
     final user = _currentUser;
     if (user == null) return false;
@@ -76,8 +77,8 @@ class PermissionMiddleware extends ChangeNotifier {
   }
 }
 
-/// A widget that renders [child] only when the plugin is visible to the user.
-/// Shows [fallback] (or nothing) otherwise.
+//? Checkpoint 3: The PluginGate Widget (The Guard Post)
+//If a user somehow sneaks through or the UI tries to build a protected widget, they hit the PluginGate guard post:.
 class PluginGate extends StatelessWidget {
   final String moduleId;
   final Widget child;
