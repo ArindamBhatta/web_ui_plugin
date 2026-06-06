@@ -86,14 +86,15 @@ class VetApplicationBootstrap {
       ),
     );
 
-    // Step 2: Important - Authorization Setup (Access denied without this!) write now it’s a dummy user for development, but you can replace it with real auth logic.
-    PermissionMiddleware.instance.setUser(
-      const UserIdentity(
-        userId: '0000-0000-0000-0000-000000000001',
-        persona: 'admin',
-        email: 'arindambhattacharyya.ab@gmail.com',
-      ),
-    );
+    /// Step 2: Important - Authorization Setup (Access denied without this!)We comment this out to let the plug-and-play LoginSignUpPage handle authentication.
+
+    // PermissionMiddleware.instance.setUser(
+    //   const UserIdentity(
+    //     userId: '0000-0000-0000-0000-000000000001',
+    //     persona: 'admin',
+    //     email: 'arindambhattacharyya.ab@gmail.com',
+    //   ),
+    // );
 
     // Step 3: Register plugins — this is the entire app configuration example route wiring happens here. Each plugin registers its own routes and dependencies.
     await AppBootstrap.registerPlugins([

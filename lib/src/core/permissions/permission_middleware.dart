@@ -4,7 +4,7 @@ import 'package:web_ui_plugin/web_ui_plugin.dart';
 /// Middleware that enforces permissions at two levels:
 /// 1. Plugin visibility  — is the plugin shown in the sidebar?
 /// 2. Route access       — can the user navigate to the route?
-class PermissionMiddleware {
+class PermissionMiddleware extends ChangeNotifier {
   PermissionMiddleware._();
   static final PermissionMiddleware instance = PermissionMiddleware._();
 
@@ -12,10 +12,16 @@ class PermissionMiddleware {
 
   /// Set (or update) the active user identity.
   /// Call this after login / on auth state changes.
-  void setUser(UserIdentity user) => _currentUser = user;
+  void setUser(UserIdentity user) {
+    _currentUser = user;
+    notifyListeners();
+  }
 
   /// Clear identity on logout.
-  void clearUser() => _currentUser = null;
+  void clearUser() {
+    _currentUser = null;
+    notifyListeners();
+  }
 
   UserIdentity? get currentUser => _currentUser;
 

@@ -32,12 +32,14 @@ class CustomTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.mandatory = false,
     this.textColor,
+    this.suffixIcon,
   }) : _textController = textController;
 
   final TextEditingController _textController;
   final String labelText;
   final String? errorText;
   final String? initialValue;
+  final Widget? suffixIcon;
   final double height;
   final double iconSize;
   final double fontLabelSize;
@@ -107,6 +109,7 @@ class CustomTextField extends StatelessWidget {
         contentPadding: EdgeInsets.fromLTRB(12, 16, 12, 16),
         border: OutlineInputBorder(),
         prefixIcon: Icon(icon, size: iconSize),
+        suffixIcon: suffixIcon,
         labelStyle: TextStyle(
           fontSize: fontLabelSize,
           color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),

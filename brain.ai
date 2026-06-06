@@ -1,0 +1,56 @@
+# WebUI Plugin: AI & Developer Brain State File (.ai)
+
+This file contains the core architecture, layout patterns, constraints, and current state of the `web_ui_plugin` package. Any AI agent or developer joining the project must read this file to maintain architectural integrity.
+
+---
+
+## 1. Core Architectural Philosophy
+
+`web_ui_plugin` is a modular, plug-and-play framework for Flutter Web SaaS administrative panels.
+
+### Action & Reactive Flows
+*   **Action Flow**: `UI Page` ➔ `FormCubit` ➔ `SectionRepo` ➔ `FirestoreService` (or custom adapter).
+*   **Reactive Flow**: `FirestoreService` ➔ `SectionRepo.dataStream` ➔ `SectionCubit` (if `supportsRealtime` is active) ➔ `UI List Rebuilds`.
+*   **Persistency**: State (cubits/repos) is kept in static variables within plugin descriptors or state containers to preserve data and streams across GoRouter page transitions.
+
+### Key Class Contracts
+*   **`DataModel`**: Every entity must implement this. `uid` must return a non-null `String` identifier.
+*   **`DefaultPluginDescription<T>`**: Declares the identity, features, permission policies, routes, and data binding for a plugin.
+*   **`PermissionMiddleware`**: Enforces sidebar visibility and route-level access guards.
+*   **`AppBootstrap`**: Configures the Material app, GoRouter, shell wrappers, and registers descriptors.
+
+---
+
+## 2. Core Layout & UI Components
+
+### List-with-Form Section (`SectionWidget`)
+*   Provides a standard master-detail two-pane layout.
+*   The left pane lists the collection items (supports search, sort, and status filters).
+*   The right pane embeds `FormPageView` which uses `WidgetConfig` to dynamically draw form fields (inputs, dropdowns, dates, etc.).
+*   Can embed child views and sub-tables (`CustomTabularView`).
+
+### Analytical Dashboard (`DashboardPage`)
+*   Aggregates live stream data from active repositories (e.g. Booking, Doctor, PetOwner).
+*   Uses `KpiCardWidget` to display metrics, trend graphs, and sparklines.
+
+### Authentication (`LoginSignUpPage`)
+*   A responsive split-screen (desktop) or centered card (mobile) login/signup flow.
+*   Accepts `onLogin` and `onSignUp` callbacks returning a `Future<UserIdentity>`.
+*   Handles loading states, custom branding, and role selection dropdowns.
+
+---
+
+## 3. Design Tokens & Styling Rules
+
+*   **Google Fonts**: Uses `Outfit` and `Poppins` for SaaS typography.
+*   **Theme**: Standardized color scheme in `AppColors` (mint/blue gray primary, sky blue secondary) and spacing constants in `AppTheme`.
+*   **Borders & Shadow**: Standardized card borders (`borderRadiusM = 8.0`) and drop shadows (`AppTheme.heavyShadow`).
+*   **Inputs**: Uniform styling with icon support (`CustomTextField` and custom fields).
+
+---
+
+## 4. Current Work & Next Steps
+
+*   **Authentication Integration**: Exposing `LoginSignUpPage` in the GoRouter setup for secure route guards.
+*   **File Uploads**: Integrating `UploadCapability` adapter to Firebase Storage.
+*   **Responsive Table Adjustments**: Polishing tabular views for mobile layouts.

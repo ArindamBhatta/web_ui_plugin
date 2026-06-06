@@ -25,6 +25,7 @@ export 'src/core/bootstrap/app_bootstrap.dart';
 
 // ── Permissions ───────────────────────────────────────────────────────────────
 export 'src/core/permissions/permission_middleware.dart';
+export 'src/core/login_signUp/login_signup_page.dart';
 // ── Theme ──────────────────────────────────────────────────────────────────────
 export 'src/core/theme/app_theme.dart';
 export 'src/core/theme/app_colors.dart';

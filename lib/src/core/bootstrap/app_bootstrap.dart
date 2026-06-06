@@ -74,6 +74,8 @@ class AppBootstrap {
     WidgetBuilder? forbiddenBuilder,
     // optional custom no plugins page builder, otherwise a default one is used.
     WidgetBuilder? noPluginsBuilder,
+    // optional custom login page builder, otherwise a default one is used.
+    WidgetBuilder? loginBuilder,
     required Widget Function(BuildContext context, Widget child) shellBuilder,
   }) {
     final router = createRouter(
@@ -81,6 +83,7 @@ class AppBootstrap {
       initialLocation: initialLocation,
       forbiddenBuilder: forbiddenBuilder,
       noPluginsBuilder: noPluginsBuilder,
+      loginBuilder: loginBuilder,
     );
     return MaterialApp.router(
       title: title,
@@ -98,14 +101,60 @@ class AppBootstrap {
     String? message,
     WidgetBuilder? forbiddenBuilder,
     WidgetBuilder? noPluginsBuilder,
+    WidgetBuilder? loginBuilder,
   }) {
     ///
     final List<RouteBase> pluginRoutes = _buildPluginRoutes();
 
     return GoRouter(
       initialLocation: initialLocation ?? '/',
+      refreshListenable: PermissionMiddleware.instance,
+      redirect: (context, state) {
+        final isLoggedIn = PermissionMiddleware.instance.currentUser != null;
+        final isAuthRoute = state.uri.path == '/login';
+
+        if (!isLoggedIn && !isAuthRoute) {
+          return '/login';
+        }
+        if (isLoggedIn && isAuthRoute) {
+          return '/';
+        }
+        return null;
+      },
       routes: [
         GoRoute(path: '/', redirect: (_, __) => _defaultRouterLocation()),
+
+        /// Login Route
+        GoRoute(
+          path: '/login',
+          builder: (context, state) {
+            return loginBuilder?.call(context) ??
+                LoginSignUpPage(
+                  onLogin: (email, password) async {
+                    await Future.delayed(const Duration(milliseconds: 800));
+                    if (email.isEmpty || password.isEmpty) {
+                      throw Exception('Email and Password cannot be empty.');
+                    }
+                    return UserIdentity(
+                      userId: 'mock-user-id',
+                      persona: 'admin',
+                      email: email,
+                    );
+                  },
+                  onSignUp: (email, password, name, mobile, persona) async {
+                    await Future.delayed(const Duration(milliseconds: 800));
+                    if (email.isEmpty || password.isEmpty) {
+                      throw Exception('Email and Password cannot be empty.');
+                    }
+                    return UserIdentity(
+                      userId: 'mock-user-id',
+                      persona: persona,
+                      email: email,
+                    );
+                  },
+                );
+          },
+        ),
 
         ///Forbidden Route
         GoRoute(

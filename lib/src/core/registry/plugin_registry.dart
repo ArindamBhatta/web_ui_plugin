@@ -36,20 +36,6 @@ class PluginRegistry {
     _plugins.add(RegisteredPlugin<T>(aggPlugin));
   }
 
-  /// Unregister a plugin by moduleId (used in tests or dynamic plugin removal).
-  // Todo: Not yet utilized.
-  Future<void> unregister(String moduleId) async {
-    final plugin = _plugins.cast<RegisteredPlugin?>().firstWhere(
-      (plugin) => plugin?.description.moduleId == moduleId,
-      orElse: () => null,
-    );
-
-    ///
-    if (plugin == null) return;
-    await plugin.description.onDispose?.call();
-    _plugins.removeWhere((p) => p.description.moduleId == moduleId);
-  }
-
   /// All registered plugins, sorted by [order].
   // Todo: order is decided by the end developer.
   List<RegisteredPlugin> get all {

@@ -18,7 +18,6 @@ class FirestoreService<T extends DataModel> with FormServiceMixin<T> {
 
   final String _collectionName;
 
-  // Todo(Arindam): Service should know Json only.
   final ModelFromJson<T> _fromJson;
 
   final String moduleId;
@@ -64,11 +63,14 @@ class FirestoreService<T extends DataModel> with FormServiceMixin<T> {
     required ModelFromJson<T> fromJson,
     bool supportsRealtime = true,
   }) {
+    //create a singleton key
     final CrossModuleSingletonKey key = CrossModuleSingletonKey(
       moduleId: moduleId,
       modelType: T.toString(),
       collection: collectionName,
     );
+
+    print("Registry Key : ${key.value}"); // doctors/DoctorModel/doctors/default
 
     return _registry.getOrCreate(
           key,

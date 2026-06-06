@@ -244,10 +244,4 @@ Issues found during architecture review (April 2026). Ordered by severity.
 **File:** `lib/src/core/section/cubit/section_state.dart`
 **Problem:** Every call to `copyWith(searchText: 'x')` silently resets `addedItemId` to `null` because it does not fall back to `this.addedItemId`.
 **Fix:** Apply the same `static const Object _unset` sentinel pattern used by `selectedItem` and `fromDate`.
-
-### #8 — `Globals.hasUnsavedFormChanges` is a mutable global static — ✅ SUCCESSFULLY COMPLETED
-**File:** `lib/src/core/contracts/globals.dart` (DELETED)
-**Problem:** `FormPageView` writes this flag and `PluginLeftNavigation` reads it, but nothing reacts to changes — no stream, no notifier. The flag can also become stale between page navigations.
-**Fix:** Successfully moved `hasUnsavedChanges` into `SectionCubit` as `SectionCubit.hasUnsavedFormChanges` and migrated all styling and layout constants to the central `AppTheme` design system, enabling complete deletion of the legacy `Globals` class.
-
 ---
