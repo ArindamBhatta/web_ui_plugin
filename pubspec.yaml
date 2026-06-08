@@ -31,10 +31,12 @@ dependencies:
   animations: ^2.1.0 # For animations
   cached_network_image: ^3.4.1
   smooth_page_indicator: ^1.2.1 # For page indicators
-  fl_chart: ^1.2.1 # For charts
-  lucide_icons_flutter: ^2.3.0 # For lucide icons
+  fl_chart: ^1.2.0 # For charts
+  lucide_icons_flutter: ^3.0.0 # For lucide icons
   pdf: ^3.11.1
   printing: ^5.13.4
+  toggle_switch: ^2.3.0
+  
 
 dev_dependencies:
   flutter_test:

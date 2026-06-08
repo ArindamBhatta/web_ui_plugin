@@ -6,7 +6,7 @@ import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 import '../view/plugin_ui/pet_owner_plugin.dart';
 import '../view/plugin_ui/doctor_plugin.dart';
-import '../view/plugin_ui/dashboard_plugin.dart';
+// import '../view/plugin_ui/dashboard_plugin.dart';
 
 /// Optional Firebase config for connecting this example app to a different
 /// Firebase project without editing package-level generated files.
@@ -98,7 +98,7 @@ class VetApplicationBootstrap {
 
     // Step 3: Register plugins — this is the entire app configuration example route wiring happens here. Each plugin registers its own routes and dependencies.
     await AppBootstrap.registerPlugins([
-      dashboardPlugin,
+      // dashboardPlugin,
       doctorsPlugin,
       petOwnerPlugin,
       technicianPlugin,

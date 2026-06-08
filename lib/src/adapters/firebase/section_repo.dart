@@ -48,7 +48,7 @@ class SectionRepo<T extends DataModel> with FormRepoMixin<T> {
   //? Why it is needed
   /// Reduces Boilerplate: In your plugins like [PetOwnerPlugin], rather than manually unpacking the descriptor's fields to construct the database service:
   factory SectionRepo.fromDescriptor(DefaultPluginDescription<T> descriptor) {
-    final PluginDataBinding<T> binding = descriptor.dataBinding;
+    final PluginDataConnector<T> binding = descriptor.dataBinding;
     //call the factory constructor
     return SectionRepo<T>(
       moduleId: descriptor.moduleId,

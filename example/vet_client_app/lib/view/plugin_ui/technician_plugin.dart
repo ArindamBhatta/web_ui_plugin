@@ -35,8 +35,7 @@ technicianPlugin = DefaultPluginDescription<TechnicianModel>(
       builder: (BuildContext ctx, GoRouterState state) => TechnicianPluginPage(
         initialSelectedItemId: state.pathParameters['id'],
       ),
-      accessPolicy:
-          OpenDefaultDevelopmentPolicy(),
+      accessPolicy: OpenDefaultDevelopmentPolicy(),
     ),
   ],
 
@@ -47,7 +46,7 @@ technicianPlugin = DefaultPluginDescription<TechnicianModel>(
   }, denyReason: 'Only admin and operator can view technicians section'),
 
   // Data binding information for this plugin's model and Firestore collection. The framework uses this to generate a repo and sync with Firestore.
-  dataBinding: PluginDataBinding<TechnicianModel>(
+  dataBinding: PluginDataConnector<TechnicianModel>(
     collectionName: 'technicians',
     fromJson: TechnicianModel.fromJson,
     createEmpty: TechnicianModel.new,

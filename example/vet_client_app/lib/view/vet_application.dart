@@ -9,78 +9,116 @@ class VetApplication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Scaffold(
-          body: Row(
-            children: [
-              PluginLeftNavigation(
-                title: 'Vet Application',
-                width: 280,
-                collapsedWidth: 56,
-                initiallyCollapsed: false,
-                showCollapseToggle: true,
-                showHeader: true,
-                footerBuilder: (context, collapsed) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: collapsed
-                        ? Tooltip(
-                            message: 'Sign Out',
-                            child: IconButton(
-                              icon: const Icon(Icons.logout, color: Colors.redAccent),
-                              onPressed: () {
-                                PermissionMiddleware.instance.clearUser();
-                              },
-                            ),
-                          )
-                        : InkWell(
-                            onTap: () {
-                              PermissionMiddleware.instance.clearUser();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .errorContainer
-                                    .withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(
+    return AnimatedBuilder(
+      animation: PermissionMiddleware.instance,
+      builder: (context, _) {
+        final currentUser = PermissionMiddleware.instance.currentUser;
+        if (currentUser == null) {
+          return LoginSignUpPage(
+            style: LoginSignUpStyle.animated,
+            brandName: 'Vet Clinic Admin',
+            brandTagline:
+                'Professional veterinary clinic administrative workspace.',
+            onLogin: (username, password) async {
+              if (username.isEmpty || password.isEmpty) {
+                throw Exception('Username and Password cannot be empty.');
+              }
+              return UserIdentity(
+                userId: 'vet-admin-id',
+                role: const UserRole(id: 'admin', name: 'Admin'),
+                email: username,
+              );
+            },
+            onSignUp: (username, password) async {
+              if (username.isEmpty || password.isEmpty) {
+                throw Exception('Username and Password cannot be empty.');
+              }
+              return UserIdentity(
+                userId: 'vet-admin-id',
+                role: const UserRole(id: 'admin', name: 'Admin'),
+                email: username,
+              );
+            },
+          );
+        }
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Scaffold(
+              body: Row(
+                children: [
+                  PluginLeftNavigation(
+                    title: 'Vet Application',
+                    width: 280,
+                    collapsedWidth: 56,
+                    initiallyCollapsed: false,
+                    showCollapseToggle: true,
+                    showHeader: true,
+                    footerBuilder: (context, collapsed) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: collapsed
+                            ? Tooltip(
+                                message: 'Sign Out',
+                                child: IconButton(
+                                  icon: const Icon(
                                     Icons.logout,
                                     color: Colors.redAccent,
-                                    size: 18,
                                   ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      'Sign Out',
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .error,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
+                                  onPressed: () {
+                                    PermissionMiddleware.instance.clearUser();
+                                  },
+                                ),
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  PermissionMiddleware.instance.clearUser();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .errorContainer
+                                        .withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.logout,
+                                        color: Colors.redAccent,
+                                        size: 18,
                                       ),
-                                    ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          'Sign Out',
+                                          style: TextStyle(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.error,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                  const VerticalDivider(width: 1),
+                  Expanded(child: child),
+                ],
               ),
-              const VerticalDivider(width: 1),
-              Expanded(child: child),
-            ],
-          ),
+            );
+          },
         );
       },
     );

@@ -124,32 +124,31 @@ class AppBootstrap {
       routes: [
         GoRoute(path: '/', redirect: (_, __) => _defaultRouterLocation()),
 
-        /// Login Route
         GoRoute(
           path: '/login',
           builder: (context, state) {
             return loginBuilder?.call(context) ??
                 LoginSignUpPage(
-                  onLogin: (email, password) async {
+                  style: LoginSignUpStyle.animated,
+                  onLogin: (username, password) async {
                     await Future.delayed(const Duration(milliseconds: 800));
-                    if (email.isEmpty || password.isEmpty) {
-                      throw Exception('Email and Password cannot be empty.');
+                    if (username.isEmpty || password.isEmpty) {
+                      throw Exception('Username and Password cannot be empty.');
                     }
                     return UserIdentity(
                       userId: 'mock-user-id',
-                      persona: 'admin',
-                      email: email,
+                      role: const UserRole(id: 'admin', name: 'Admin'),
+                      email: username,
                     );
                   },
-                  onSignUp: (email, password, name, mobile, persona) async {
-                    await Future.delayed(const Duration(milliseconds: 800));
-                    if (email.isEmpty || password.isEmpty) {
-                      throw Exception('Email and Password cannot be empty.');
+                  onSignUp: (username, password) async {
+                    if (username.isEmpty || password.isEmpty) {
+                      throw Exception('Username and Password cannot be empty.');
                     }
                     return UserIdentity(
                       userId: 'mock-user-id',
-                      persona: persona,
-                      email: email,
+                      role: const UserRole(id: 'admin', name: 'Admin'),
+                      email: username,
                     );
                   },
                 );

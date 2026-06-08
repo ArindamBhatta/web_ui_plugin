@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
-//PluginRouteBuilder is a function type that defines how to build a widget for a given route, using the current BuildContext and GoRouterState. if we pass wrong argument typedef stop us.
+//PluginRouteBuilder is a function type that defines how to build a widget for a given route,
 typedef PluginRouteBuilder =
     Widget Function(BuildContext context, GoRouterState state);
 
@@ -34,19 +34,20 @@ class SingleRouteDescriptionAndPolicy {
 }
 
 ///Step 3  Data binding information for a plugin's model and Firestore collection.
-class PluginDataBinding<T extends DataModel> {
+class PluginDataConnector<T extends DataModel> {
   final String collectionName;
   final T Function(Map<String, dynamic> json) fromJson;
   final T Function() createEmpty;
 
-  const PluginDataBinding({
+  const PluginDataConnector({
     required this.collectionName,
     required this.fromJson,
     required this.createEmpty,
   });
 }
 
-/// The top-level descriptor a developer provides to register a plugin. This is the entire surface area a module author fills in.
+/// 🌱 The top-level description
+/// a developer provides to register a plugin. This is the entire surface area a module author fills in.
 class DefaultPluginDescription<T extends DataModel> {
   /// Stable unique identifier.
   final String moduleId;
@@ -64,7 +65,7 @@ class DefaultPluginDescription<T extends DataModel> {
   final List<SingleRouteDescriptionAndPolicy> routes;
 
   ///Step 3:  Data binding: collection, serializer, empty factory.
-  final PluginDataBinding<T> dataBinding;
+  final PluginDataConnector<T> dataBinding;
 
   /// Visibility policy: is this plugin shown to current user?
   final PermissionPolicyAgreement? visibilityPolicy;

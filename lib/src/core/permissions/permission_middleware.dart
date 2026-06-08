@@ -62,7 +62,8 @@ class PermissionMiddleware extends ChangeNotifier {
       }
     }
 
-    final policy = route?.accessPolicy ?? plugin.description.visibilityPolicy;
+    final PermissionPolicyAgreement? policy =
+        route?.accessPolicy ?? plugin.description.visibilityPolicy;
     if (policy == null) return true;
 
     return policy

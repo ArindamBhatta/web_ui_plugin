@@ -27,7 +27,7 @@ doctorsPlugin = DefaultPluginDescription<DoctorModel>(
     VetApplicationEnums.operator.label,
   }),
 
-  dataBinding: PluginDataBinding<DoctorModel>(
+  dataBinding: PluginDataConnector<DoctorModel>(
     collectionName: 'doctors', // Firestore collection name
     fromJson: DoctorModel.fromJson,
     createEmpty: DoctorModel.new,

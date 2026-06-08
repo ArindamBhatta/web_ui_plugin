@@ -1,13 +1,44 @@
-/// Identity of the currently authenticated user [PermissionMiddleware] and [PluginRegistry].
+/// Represents a role assigned to a user within the framework.
+class UserRole {
+  final String id;
+  final String name;
+
+  const UserRole({required this.id, required this.name});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserRole && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+}
+
+/// Identity of the currently authenticated user [PermissionMiddleware] and [LoginSignUpPage] [AppBootstrap].
 class UserIdentity {
   final String userId;
   final String? email;
-  final String persona;
+  final String? name;
+  final String? mobile;
+  final UserRole role;
 
-  const UserIdentity({required this.userId, required this.persona, this.email});
+  /// Backwards compatibility getter for persona (returns role.id).
+  String get persona => role.id;
+
+  const UserIdentity({
+    required this.userId,
+    required this.role,
+    this.email,
+    this.name,
+    this.mobile,
+  });
 }
 
-/// Create instance where need permission evaluation like visibility, route access, etc.[PermissionMiddleware] [PluginRegistry].
+//
+//                             ----------- Permission ---------------
+//
+
+// Create instance where need permission evaluation like visibility, route access, etc.[PermissionMiddleware]
 class PermissionContext {
   final UserIdentity user;
   final String moduleId;
@@ -28,13 +59,12 @@ class PermissionResult {
   const PermissionResult.denied(this.reason) : granted = false;
 }
 
-/// Implement this in the consuming app to encode your Role-Based Access Control logic.[DefaultPluginDescription] and [AppBootstrap].
+/// Implement this in the consuming app to encode your Role-Based Access Control logic.[DefaultPluginDescription] [PermissionMiddleware] and [AppBootstrap].
 abstract interface class PermissionPolicyAgreement {
-  //method Definition
   PermissionResult evaluate(PermissionContext context);
 }
 
-/// Default open policy — grants everything. Use only in development.
+//! Default open policy — grants everything. Use only in development.
 class OpenDefaultDevelopmentPolicy implements PermissionPolicyAgreement {
   const OpenDefaultDevelopmentPolicy();
 

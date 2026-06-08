@@ -31,7 +31,7 @@ petOwnerPlugin = DefaultPluginDescription<PetOwnerModel>(
   }),
 
   /// Data binding: collection, serializer, empty factory. The framework uses this to generate a repo and sync with Firestore. The plugin author only writes the model and the fromJson logic, and the framework handles the rest.
-  dataBinding: PluginDataBinding<PetOwnerModel>(
+  dataBinding: PluginDataConnector<PetOwnerModel>(
     collectionName: 'petOwners', // Firestore collection name
     fromJson: PetOwnerModel.fromJson,
     createEmpty: PetOwnerModel.new,
@@ -47,9 +47,8 @@ petOwnerPlugin = DefaultPluginDescription<PetOwnerModel>(
     ),
     SingleRouteDescriptionAndPolicy(
       path: '/pet-owners/:id', //GoRouter path with path parameter
-      builder: (BuildContext ctx, GoRouterState state) => PetOwnerPluginPage(
-        initialSelectedItemId: state.pathParameters['id'],
-      ),
+      builder: (BuildContext ctx, GoRouterState state) =>
+          PetOwnerPluginPage(initialSelectedItemId: state.pathParameters['id']),
     ),
   ],
 );
@@ -76,7 +75,7 @@ class PetPluginState {
           supportsCrud: true,
           supportsRealtime: true,
         ),
-        dataBinding: PluginDataBinding<PetModel>(
+        dataBinding: PluginDataConnector<PetModel>(
           collectionName: 'pets',
           fromJson: PetModel.fromJson,
           createEmpty: PetModel.new,
