@@ -22,6 +22,7 @@ doctorsPlugin = DefaultPluginDescription<DoctorModel>(
     supportsUpload: true,
   ),
 
+  // Optional visibility policy. The framework evaluates this and handles showing/hiding the plugin from the sidebar, routes, etc.
   visibilityPolicy: PersonaPermissionPolicy({
     VetApplicationEnums.admin.label,
     VetApplicationEnums.operator.label,

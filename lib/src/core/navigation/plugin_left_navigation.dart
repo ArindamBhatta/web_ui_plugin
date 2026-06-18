@@ -72,6 +72,7 @@ class _RightTooltipState extends State<_RightTooltip> {
   }
 }
 
+//End user use this to create navigation
 class PluginLeftNavigation extends StatefulWidget {
   final String? title;
   final double width;

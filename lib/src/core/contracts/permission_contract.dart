@@ -73,7 +73,7 @@ class OpenDefaultDevelopmentPolicy implements PermissionPolicyAgreement {
       const PermissionResult.granted();
 }
 
-/// Restricts access to users whose persona is in the [allowedPersonas] set.
+/// Restricts access to users whose persona is in the [doctorPlugin] set.
 class PersonaPermissionPolicy implements PermissionPolicyAgreement {
   final Set<String> allowedPersonas;
   final String? denyReason;

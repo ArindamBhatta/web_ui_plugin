@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:web_ui_plugin/web_ui_plugin.dart';
 
 //?  PermissionMiddleware (The Gatekeeper Evaluating Session State)
-// It keeps track of the active runtime state—specifically the currently logged-in user (_currentUser).
-// It needs to evaluate the rules in the registry against the logged-in user.
+//1. [app_bootstrap] goRouter uses this to check route access.
+//2. login_signup page 3. plugin_left_navigation
 class PermissionMiddleware extends ChangeNotifier {
   PermissionMiddleware._();
   static final PermissionMiddleware instance = PermissionMiddleware._();
